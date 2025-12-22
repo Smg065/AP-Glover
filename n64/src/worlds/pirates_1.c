@@ -625,7 +625,6 @@ void CollectedLifePirates1(u32 ptr)
             if((u32)ap_memory.pc.worlds[AP_PIRATES_L1].life_checks[i].ptr == ptr)
             {
                 garib_life_t* object = (garib_life_t*) ptr;
-                object->type = 0;
                 ap_memory.pc.worlds[AP_PIRATES_L1].life_checks[i].collected = 1;
                 ap_memory.pc.worlds[AP_PIRATES_L1].life_checks[i].ptr = 0;
             }
@@ -701,7 +700,7 @@ void TipTextHintPirates1(u32 orig_txt_ptr)
         {
             if(ap_memory.pc.worlds[AP_PIRATES_L1].tip_checks[i].ptr == ap_memory.pc.last_tip_ptr)
             {
-                if(ap_memory.pc.worlds[AP_PIRATES_L1].tip_checks[i].tip_text.last_line == 0)
+                if(ap_memory.pc.worlds[AP_PIRATES_L1].tip_checks[i].tip_text.last_line == 0 || ap_memory.pc.worlds[AP_PIRATES_L1].tip_checks[i].active)
                 {
                     return;
                 }
@@ -713,6 +712,7 @@ void TipTextHintPirates1(u32 orig_txt_ptr)
                     if(line + 1 == ap_memory.pc.worlds[AP_PIRATES_L1].tip_checks[i].tip_text.last_line)
                     {
                         (*(u32*)text_action) = 0x00000002;
+                        ap_memory.pc.worlds[AP_PIRATES_L1].tip_checks[i].active = true;
                         return;
                     }
                     else
@@ -721,6 +721,10 @@ void TipTextHintPirates1(u32 orig_txt_ptr)
                         (*(u32*)text_action) = 0x00000000;
                     }
                 }
+            }
+            else if(ap_memory.pc.worlds[AP_PIRATES_L1].tip_checks[i].active)
+            {
+                ap_memory.pc.worlds[AP_PIRATES_L1].tip_checks[i].active = false;
             }
         }
     }

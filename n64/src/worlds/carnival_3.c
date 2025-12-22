@@ -573,7 +573,7 @@ void MonitorFallenEnemiesCarnival3()
             {
                 u32 ypos = ap_memory.pc.worlds[AP_CARNIVAL_L3].enemy_checks[0].ptr + 0x38;
                 u32 yvalue = (*(u32*)ypos);
-                if(yvalue >= 0xC4480000) //(-800 in float)
+                if(yvalue >= 0xC44F8000) //(-800 in float)
                 {
                     ap_memory.pc.worlds[AP_CARNIVAL_L3].enemy_checks[0].collected = 1;
                     ap_memory.pc.worlds[AP_CARNIVAL_L3].enemy_checks[0].ptr = 0;
@@ -696,7 +696,6 @@ void CollectedLifeCarnival3(u32 ptr)
             if((u32)ap_memory.pc.worlds[AP_CARNIVAL_L3].life_checks[i].ptr == ptr)
             {
                 garib_life_t* object = (garib_life_t*) ptr;
-                object->type = 0;
                 ap_memory.pc.worlds[AP_CARNIVAL_L3].life_checks[i].collected = 1;
                 ap_memory.pc.worlds[AP_CARNIVAL_L3].life_checks[i].ptr = 0;
             }

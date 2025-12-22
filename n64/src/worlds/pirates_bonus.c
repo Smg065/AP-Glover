@@ -360,28 +360,6 @@ void DefeatedEnemyPiratesBONUS(u32 ptr)
     }
 }
 
-// void MonitorFallenEnemiesPiratesBONUS()
-// {
-//     if(gvr_current_map == MAP_PIRATES_BONUS)
-//     {
-//         if(ap_memory.pc.worlds[AP_PIRATES_BONUS].enemy_checks[0].ptr != 0)
-//         {
-//             u32 spawn_ptr = ap_memory.pc.worlds[AP_PIRATES_BONUS].enemy_checks[0].ptr + 0x22;
-//             if((*(u8*)spawn_ptr) == 1)
-//             {
-//                 u32 ypos = ap_memory.pc.worlds[AP_PIRATES_BONUS].enemy_checks[0].ptr + 0x38;
-//                 u32 yvalue = (*(u32*)ypos);
-//                 if(yvalue >= 0xBF800000) //(-1 in float)
-//                 {
-//                     ap_memory.pc.worlds[AP_PIRATES_BONUS].enemy_checks[0].collected = 1;
-//                     ap_memory.pc.worlds[AP_PIRATES_BONUS].enemy_checks[0].ptr = 0;
-//                 }
-//             }
-//         }
-//     }
-// }
-
-
 //Life
 
 void LifeInitPiratesBONUS()
@@ -429,7 +407,6 @@ void CollectedLifePiratesBONUS(u32 ptr)
             if((u32)ap_memory.pc.worlds[AP_PIRATES_BONUS].life_checks[i].ptr == ptr)
             {
                 garib_life_t* object = (garib_life_t*) ptr;
-                object->type = 0;
                 ap_memory.pc.worlds[AP_PIRATES_BONUS].life_checks[i].collected = 1;
                 ap_memory.pc.worlds[AP_PIRATES_BONUS].life_checks[i].ptr = 0;
             }

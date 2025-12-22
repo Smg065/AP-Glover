@@ -410,7 +410,6 @@ void CollectedLifeSpace2(u32 ptr)
             if((u32)ap_memory.pc.worlds[AP_SPACE_L2].life_checks[i].ptr == ptr)
             {
                 garib_life_t* object = (garib_life_t*) ptr;
-                object->type = 0;
                 ap_memory.pc.worlds[AP_SPACE_L2].life_checks[i].collected = 1;
                 ap_memory.pc.worlds[AP_SPACE_L2].life_checks[i].ptr = 0;
             }
@@ -555,26 +554,6 @@ void MonitorEventsSpace2()
         }
     }
 }
-
-// void PuzzleEventsSpace2(u32 ptr)
-// {
-//     if(ptr == 0x802A2AF4 && space2_gatepressed && space2_gatetimer == 0)
-//     {
-//         space2_gatetimer = 0x190;
-//         space2_gatepressed = false;
-//         return gvr_fn_activate_puzzle(0x803140D0);
-//     }
-//     return gvr_fn_activate_puzzle(ptr);
-// }
-
-// bool PuzzleConditionsSpace2(u32 ptr)
-// {
-//     if(ptr == 0x802A2AF4 && space2_gatepressed && space2_gatetimer == 0) //override this ptr
-//     {
-//         return true;
-//     } 
-//     return false;
-// }
 
 void HitBallSwitchSpace2(u32 ptr)
 {

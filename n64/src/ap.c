@@ -3,10 +3,12 @@ u8 single_garib_counter = 0;
 
 u8 life_counter = 0;
 u32 dialog_addr = 0;
+u8 dialog_map = 0;
 u8 timer = 0;
 u16 trap_timer = 0;
 u16 trap_counter = 0;
-bool frogt = false;
+bool trap_active = false;
+bool is_cheat = false;
 
 u32 display_dialog(u16 x_screen, u16 y_screen, u8 R, u8 G, u8 B, u8 alpha, float x_scale, float y_scale, u8 zero,
       char *ptr, u8 alignment);
@@ -47,7 +49,7 @@ void InitAPWorlds()
     ap_memory.pc.max_garib_totals[AP_CARNIVAL_BONUS] = 20;
 
     ap_memory.pc.worlds[AP_PIRATES_L1].hub_entrance = 3;
-    ap_memory.pc.worlds[AP_PIRATES_L1].door = 3;
+    ap_memory.pc.worlds[AP_PIRATES_L1].door = 1;
     ap_memory.pc.max_garib_totals[AP_PIRATES_L1] = 70;
     ap_memory.pc.worlds[AP_PIRATES_L2].hub_entrance = 3;
     ap_memory.pc.worlds[AP_PIRATES_L2].door = 2;
@@ -398,15 +400,6 @@ void CheckReceivedAPItems()
             {
                 ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
                 char *text = "YOU RECEIVED LEDGE GRAB";
-                DialogQueue(text);
-                ap_memory.pc.send_text++;
-            }
-            break;
-        case AP_LOCATE_GARIB:
-            if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-            {
-                ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                char *text = "YOU RECEIVED LOCATE GARIB";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -1187,229 +1180,6 @@ void CheckReceivedAPItems()
                 ap_memory.pc.send_text++;
             }
             break;
-        case AP_GLOVER_DEATH:
-            if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-            {
-                if(gvr_current_map == 0xFF)
-                {
-                    ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                }
-                else if(gvr_cutscene == 0)
-                {
-                    ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                    gvr_fn_respawn();
-                }
-            }
-            break;
-        case AP_CHICKEN_SOUND:
-            if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-            {
-                if(gvr_cutscene == 0)
-                {
-                    ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                    if(ap_memory.pc.n64_items[item] % 4 == 0)
-                    {
-                        gvr_fn_sounds(0x6F, 0x0FFF, 0x80, 0x0);
-                        break;
-                    }
-                    else if(ap_memory.pc.n64_items[item] % 3 == 0)
-                    {
-                        gvr_fn_sounds(0x49, 0x0FFF, 0x80, 0x0);
-                        break;
-                    }
-                    else if(ap_memory.pc.n64_items[item] % 2 == 0)
-                    {
-                        gvr_fn_sounds(0x6E, 0x0FFF, 0x80, 0x0);
-                        break;
-                    }
-                    else
-                    {
-                        gvr_fn_sounds(0x181, 0x0FFF, 0x80, 0x0);
-                        break;
-                    }
-                }
-            }
-            break;
-        case AP_GLOVER_TAG:
-            if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-            {
-                if(gvr_cutscene == 0 && animation_ptr->animations->current_animation == 0x0003)
-                {
-                    ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                    ap_memory.pc.n64_taglink++;
-                    switch (gvr_current_ball)
-                    {
-                    case CURRENT_RUBBER_BALL:
-                        if(ap_memory.pc.items[AP_BOWLING_BALL])
-                            return gvr_fn_change_ball(TRANSFORM_BOWLING_BALL, 0xFFFFFFFF, 0x01, 0x18);
-                        else if(ap_memory.pc.items[AP_POWER_BALL])
-                            return gvr_fn_change_ball(TRANSFORM_POWER_BALL, 0xFFFFFFFF, 0x01, 0x18);
-                        else if(ap_memory.pc.items[AP_BEARING_BALL])
-                            return gvr_fn_change_ball(TRANSFORM_BEARING_BALL, 0xFFFFFFFF, 0x01, 0x18);
-                        else if(ap_memory.pc.items[AP_CRYSTAL_BALL])
-                            return gvr_fn_change_ball(TRANSFORM_CRYSTAL_BALL, 0xFFFFFFFF, 0x01, 0x18);
-                        break;
-                    case CURRENT_BOWLING_BALL:
-                        if(ap_memory.pc.items[AP_POWER_BALL])
-                            return gvr_fn_change_ball(TRANSFORM_POWER_BALL, 0xFFFFFFFF, 0x01, 0x18);
-                        else if(ap_memory.pc.items[AP_BEARING_BALL])
-                            return gvr_fn_change_ball(TRANSFORM_BEARING_BALL, 0xFFFFFFFF, 0x01, 0x18);
-                        else if(ap_memory.pc.items[AP_CRYSTAL_BALL])
-                            return gvr_fn_change_ball(TRANSFORM_CRYSTAL_BALL, 0xFFFFFFFF, 0x01, 0x18);
-                        else if(ap_memory.pc.items[AP_RUBBER_BALL])
-                            return gvr_fn_change_ball(TRANSFORM_RUBBER_BALL, 0xFFFFFFFF, 0x01, 0x18);
-                        else
-                        return;
-                    case CURRENT_POWER_BALL:
-                        if(ap_memory.pc.items[AP_BEARING_BALL])
-                        return gvr_fn_change_ball(TRANSFORM_BEARING_BALL, 0xFFFFFFFF, 0x01, 0x18);
-                        else if(ap_memory.pc.items[AP_CRYSTAL_BALL])
-                        return gvr_fn_change_ball(TRANSFORM_CRYSTAL_BALL, 0xFFFFFFFF, 0x01, 0x18);
-                        else if(ap_memory.pc.items[AP_RUBBER_BALL])
-                        return gvr_fn_change_ball(TRANSFORM_RUBBER_BALL, 0xFFFFFFFF, 0x01, 0x18);
-                        else if(ap_memory.pc.items[AP_BOWLING_BALL])
-                        return gvr_fn_change_ball(TRANSFORM_BOWLING_BALL, 0xFFFFFFFF, 0x01, 0x18);
-                        else
-                        return;
-                    case CURRENT_BEARING_BALL:
-                        if(ap_memory.pc.items[AP_CRYSTAL_BALL])
-                        return gvr_fn_change_ball(TRANSFORM_CRYSTAL_BALL, 0xFFFFFFFF, 0x01, 0x18);
-                        else if(ap_memory.pc.items[AP_RUBBER_BALL])
-                        return gvr_fn_change_ball(TRANSFORM_RUBBER_BALL, 0xFFFFFFFF, 0x01, 0x18);
-                        else if(ap_memory.pc.items[AP_BOWLING_BALL])
-                        return gvr_fn_change_ball(TRANSFORM_BOWLING_BALL, 0xFFFFFFFF, 0x01, 0x18);
-                        else if(ap_memory.pc.items[AP_POWER_BALL])
-                        return gvr_fn_change_ball(TRANSFORM_POWER_BALL, 0xFFFFFFFF, 0x01, 0x18);
-                        else
-                        return;
-                    case CURRENT_CRYSTAL_BALL:
-                        if(ap_memory.pc.items[AP_RUBBER_BALL])
-                        return gvr_fn_change_ball(TRANSFORM_RUBBER_BALL, 0xFFFFFFFF, 0x01, 0x18);
-                        else if(ap_memory.pc.items[AP_BOWLING_BALL])
-                        return gvr_fn_change_ball(TRANSFORM_BOWLING_BALL, 0xFFFFFFFF, 0x01, 0x18);
-                        else if(ap_memory.pc.items[AP_POWER_BALL])
-                        return gvr_fn_change_ball(TRANSFORM_POWER_BALL, 0xFFFFFFFF, 0x01, 0x18);
-                        else if(ap_memory.pc.items[AP_BEARING_BALL])
-                        return gvr_fn_change_ball(TRANSFORM_BEARING_BALL, 0xFFFFFFFF, 0x01, 0x18);
-                        else
-                        return;
-                    }
-                    return;
-                }
-            }
-            break;
-        case AP_HERCULES_TRANSFORM:
-            if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-            {
-                if(gvr_current_map == 0xFF)
-                {
-                    ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                }
-                else if(gvr_cutscene == 0)
-                {
-                    ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                    return gvr_fn_change_ball(TRANSFORM_HERCULES_POTION, 0xFF, 0x01, 0x18);
-                }
-            }
-            break;
-        case AP_SPEED_TRANSFORM:
-            if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-            {
-                if(gvr_current_map == 0xFF)
-                {
-                    ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                }
-                else if(gvr_cutscene == 0)
-                {
-                    ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                    return gvr_fn_change_ball(TRANSFORM_SPEED_POTION, 0xFF, 0x01, 0x18);
-                }
-            }
-            break;
-        case AP_STICKY_TRANSFORM:
-            if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-            {
-                if(gvr_current_map == 0xFF)
-                {
-                    ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                }
-                else if(gvr_cutscene == 0)
-                {
-                    ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                    return gvr_fn_change_ball(TRANSFORM_STICKY_POTION, 0xFF, 0x01, 0x18);
-                }
-            }
-            break;
-        case AP_FROG_TRANSFORM:
-            if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-            {
-                if(gvr_current_map == 0xFF)
-                {
-                    ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                }
-                else if(gvr_cutscene == 0)
-                {
-                    ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                    return gvr_fn_change_ball(TRANSFORM_FROG_POTION, 0xFF, 0x01, 0x18);
-                }
-            }
-            break;
-        case AP_BOOMERANG_TRANSFORM:
-            if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-            {
-                if(gvr_current_map == 0xFF)
-                {
-                    ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                }
-                else if(gvr_cutscene == 0)
-                {
-                    ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                    return gvr_fn_change_ball(TRANSFORM_BOOMERANG_POTION, 0xFF, 0x01, 0x18);
-                }
-            }
-            break;
-        case AP_BEACHBALL_TRANSFORM:
-            if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-            {
-                if(gvr_current_map == 0xFF)
-                {
-                    ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                }
-                else if(gvr_cutscene == 0)
-                {
-                    ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                    return gvr_fn_change_ball(TRANSFORM_BEACH_BALL, 0xFF, 0x01, 0x18);
-                }
-            }
-            break;
-        case AP_HELICOPTER_TRANSFORM:
-            if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-            {
-                if(gvr_current_map == 0xFF)
-                {
-                    ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                }
-                else if(gvr_cutscene == 0)
-                {
-                    ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                    return gvr_fn_change_ball(TRANSFORM_HELICOPTER_POTION, 0xFF, 0x01, 0x18);
-                }
-            }
-            break;
-        case AP_DEATH_TRANSFORM:
-            if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-            {
-                if(gvr_current_map == 0xFF)
-                {
-                    ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                }
-                else if(gvr_cutscene == 0)
-                {
-                    ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                    return gvr_fn_change_ball(TRANSFORM_DEATH_POTION, 0xFF, 0x01, 0x18);
-                }
-            }
-            break;
         case AP_LIFE_UP:
             if(ap_memory.pc.items[item] != life_counter)
             {
@@ -1418,106 +1188,6 @@ void CheckReceivedAPItems()
                 char *text = "YOU RECEIVED A 1-UP";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
-            }
-            break;
-        case AP_FROG_TRAP:
-            if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-            {
-                if(trap_counter == 0)
-                {
-                    trap_counter = gvr_loaded_timer;
-                    break;
-                }
-                if(gvr_current_map != 0xFF && gvr_current_map != 0x2B && gvr_current_map != 0x2C && gvr_current_map != 0x2E)
-                {
-                    if(gvr_loaded_timer > 0 && trap_counter != gvr_loaded_timer)
-                    {
-                        if(!frogt)
-                        {
-                            ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                            gvr_fn_glover_cheat(0x14, 1);
-                            char *text = "YOU RECEIVED A FROG TRAP";
-                            DialogQueue(text);
-                            ap_memory.pc.send_text++;
-                            trap_timer = 500;
-                            frogt = true;
-                            trap_counter = 0;
-                        }
-                    }
-                }
-                else
-                {
-                    trap_counter = 0;
-                }
-            }
-            break;
-        case AP_CAMERA_TRAP:
-            if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-            {
-                if(trap_counter == 0)
-                {
-                    trap_counter = gvr_loaded_timer;
-                    break;
-                }
-                if(gvr_current_map != 0xFF && gvr_current_map != 0x2B && gvr_current_map != 0x2C && gvr_current_map != 0x2E)
-                {
-                    if(gvr_loaded_timer > 0 && trap_counter != gvr_loaded_timer)
-                    {
-                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_fn_glover_cheat(0x0C, 1);
-                        char *text = "YOU RECEIVED A CAMERA TRAP";
-                        DialogQueue(text);
-                        ap_memory.pc.send_text++;
-                        trap_timer = 500;
-                        trap_counter = 0;
-                    }
-                }
-                else
-                {
-                    trap_counter = 0;
-                }
-            }
-            break;
-        case AP_CURSE_BALL:
-            if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-            {
-                if(trap_counter == 0)
-                {
-                    trap_counter = gvr_loaded_timer;
-                    break;
-                }
-                if(gvr_current_map != 0xFF && gvr_current_map != 0x2B && gvr_current_map != 0x2C && gvr_current_map != 0x2E)
-                {
-                    if(gvr_loaded_timer > 0 && trap_counter != gvr_loaded_timer)
-                    {
-                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_fn_curse_ball(0x1F4, 0x80, 0x01, 0x18);
-                        char *text = "YOU RECEIVED A CURSE BALL";
-                        DialogQueue(text);
-                        ap_memory.pc.send_text++;     
-                    }
-                }
-            }
-            break;
-        case AP_CBALL_TRAP:
-            if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-            {
-                if(trap_counter == 0)
-                {
-                    trap_counter = gvr_loaded_timer;
-                    break;
-                }
-                if(gvr_current_map != 0xFF && gvr_current_map != 0x2B && gvr_current_map != 0x2C && gvr_current_map != 0x2E)
-                {
-                    if(gvr_loaded_timer > 0 && trap_counter != gvr_loaded_timer)
-                    {
-                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_fn_change_ball(TRANSFORM_CRYSTAL_BALL, 0x80, 0x1, 0x18);
-                        char *text = "YOU RECEIVED CRYSTAL B TRAP";
-                        DialogQueue(text);
-                        ap_memory.pc.send_text++;     
-                    }
-                }
             }
             break;
         case AP_ATLANTIS_L1_CHECKPOINT1:
@@ -2041,6 +1711,7 @@ void CheckReceivedAPItems()
         case AP_DEBUG:
             if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
             {
+                ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
                 ap_memory.pc.items[AP_BOWLING_BALL] = 1;
                 ap_memory.pc.items[AP_RUBBER_BALL] = 1;
                 ap_memory.pc.items[AP_BEARING_BALL] = 1;
@@ -2126,10 +1797,318 @@ void CheckReceivedAPItems()
                 ap_memory.pc.items[AP_SPACE_L3_CHECKPOINT2] = 1;
                 ap_memory.pc.items[AP_SPACE_L3_CHECKPOINT3] = 1;
                 ap_memory.pc.items[AP_SPACE_L3_CHECKPOINT4] = 1;
+                ap_memory.pc.items[AP_OPEN_HUBS] = 1;
+                ap_memory.pc.items[AP_OPEN_WORLDS] = 1;
             }
             break;
         default:
             break;
+        }
+    }
+}
+
+void CheckSensitiveReceivedAPItems()
+{
+    if(gvr_cutscene == 0)
+    {
+        for(int item = 0; item <= AP_MAX_ITEM; item++)
+        {
+            switch (item)
+            {
+                case AP_LOCATE_GARIB:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_fn_glover_cheat(0x0, 1);
+                    }
+                    break;
+                case AP_GLOVER_DEATH:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_fn_respawn();
+                    }
+                    break;
+                case AP_CHICKEN_SOUND:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {  
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        if(ap_memory.pc.n64_items[item] % 4 == 0)
+                        {
+                            gvr_fn_sounds(0x6F, 0x0FFF, 0x80, 0x0);
+                            break;
+                        }
+                        else if(ap_memory.pc.n64_items[item] % 3 == 0)
+                        {
+                            gvr_fn_sounds(0x49, 0x0FFF, 0x80, 0x0);
+                            break;
+                        }
+                        else if(ap_memory.pc.n64_items[item] % 2 == 0)
+                        {
+                            gvr_fn_sounds(0x6E, 0x0FFF, 0x80, 0x0);
+                            break;
+                        }
+                        else
+                        {
+                            gvr_fn_sounds(0x181, 0x0FFF, 0x80, 0x0);
+                            break;
+                        }
+                    }
+                    break;
+                case AP_GLOVER_TAG:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        if(animation_ptr->animations->current_animation == 0x0003)
+                        {
+                            ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                            ap_memory.pc.n64_taglink++;
+                            switch (gvr_current_ball)
+                            {
+                            case CURRENT_RUBBER_BALL:
+                                if(ap_memory.pc.items[AP_BOWLING_BALL])
+                                    return gvr_fn_change_ball(TRANSFORM_BOWLING_BALL, 0xFFFFFFFF, 0x01, 0x18);
+                                else if(ap_memory.pc.items[AP_POWER_BALL])
+                                    return gvr_fn_change_ball(TRANSFORM_POWER_BALL, 0xFFFFFFFF, 0x01, 0x18);
+                                else if(ap_memory.pc.items[AP_BEARING_BALL])
+                                    return gvr_fn_change_ball(TRANSFORM_BEARING_BALL, 0xFFFFFFFF, 0x01, 0x18);
+                                else if(ap_memory.pc.items[AP_CRYSTAL_BALL])
+                                    return gvr_fn_change_ball(TRANSFORM_CRYSTAL_BALL, 0xFFFFFFFF, 0x01, 0x18);
+                                break;
+                            case CURRENT_BOWLING_BALL:
+                                if(ap_memory.pc.items[AP_POWER_BALL])
+                                    return gvr_fn_change_ball(TRANSFORM_POWER_BALL, 0xFFFFFFFF, 0x01, 0x18);
+                                else if(ap_memory.pc.items[AP_BEARING_BALL])
+                                    return gvr_fn_change_ball(TRANSFORM_BEARING_BALL, 0xFFFFFFFF, 0x01, 0x18);
+                                else if(ap_memory.pc.items[AP_CRYSTAL_BALL])
+                                    return gvr_fn_change_ball(TRANSFORM_CRYSTAL_BALL, 0xFFFFFFFF, 0x01, 0x18);
+                                else if(ap_memory.pc.items[AP_RUBBER_BALL])
+                                    return gvr_fn_change_ball(TRANSFORM_RUBBER_BALL, 0xFFFFFFFF, 0x01, 0x18);
+                                else
+                                return;
+                            case CURRENT_POWER_BALL:
+                                if(ap_memory.pc.items[AP_BEARING_BALL])
+                                return gvr_fn_change_ball(TRANSFORM_BEARING_BALL, 0xFFFFFFFF, 0x01, 0x18);
+                                else if(ap_memory.pc.items[AP_CRYSTAL_BALL])
+                                return gvr_fn_change_ball(TRANSFORM_CRYSTAL_BALL, 0xFFFFFFFF, 0x01, 0x18);
+                                else if(ap_memory.pc.items[AP_RUBBER_BALL])
+                                return gvr_fn_change_ball(TRANSFORM_RUBBER_BALL, 0xFFFFFFFF, 0x01, 0x18);
+                                else if(ap_memory.pc.items[AP_BOWLING_BALL])
+                                return gvr_fn_change_ball(TRANSFORM_BOWLING_BALL, 0xFFFFFFFF, 0x01, 0x18);
+                                else
+                                return;
+                            case CURRENT_BEARING_BALL:
+                                if(ap_memory.pc.items[AP_CRYSTAL_BALL])
+                                return gvr_fn_change_ball(TRANSFORM_CRYSTAL_BALL, 0xFFFFFFFF, 0x01, 0x18);
+                                else if(ap_memory.pc.items[AP_RUBBER_BALL])
+                                return gvr_fn_change_ball(TRANSFORM_RUBBER_BALL, 0xFFFFFFFF, 0x01, 0x18);
+                                else if(ap_memory.pc.items[AP_BOWLING_BALL])
+                                return gvr_fn_change_ball(TRANSFORM_BOWLING_BALL, 0xFFFFFFFF, 0x01, 0x18);
+                                else if(ap_memory.pc.items[AP_POWER_BALL])
+                                return gvr_fn_change_ball(TRANSFORM_POWER_BALL, 0xFFFFFFFF, 0x01, 0x18);
+                                else
+                                return;
+                            case CURRENT_CRYSTAL_BALL:
+                                if(ap_memory.pc.items[AP_RUBBER_BALL])
+                                return gvr_fn_change_ball(TRANSFORM_RUBBER_BALL, 0xFFFFFFFF, 0x01, 0x18);
+                                else if(ap_memory.pc.items[AP_BOWLING_BALL])
+                                return gvr_fn_change_ball(TRANSFORM_BOWLING_BALL, 0xFFFFFFFF, 0x01, 0x18);
+                                else if(ap_memory.pc.items[AP_POWER_BALL])
+                                return gvr_fn_change_ball(TRANSFORM_POWER_BALL, 0xFFFFFFFF, 0x01, 0x18);
+                                else if(ap_memory.pc.items[AP_BEARING_BALL])
+                                return gvr_fn_change_ball(TRANSFORM_BEARING_BALL, 0xFFFFFFFF, 0x01, 0x18);
+                                else
+                                return;
+                            }
+                            return;
+                        }
+                    }
+                    break;
+                case AP_HERCULES_TRANSFORM:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        if(!trap_active)
+                        {
+                            ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                            trap_timer = 500;
+                            trap_active = true;
+                            trap_counter = 0;
+                            return gvr_fn_change_ball(TRANSFORM_HERCULES_POTION, 0xFF, 0x01, 0x18);
+                        }
+                    }
+                    break;
+                case AP_SPEED_TRANSFORM:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        if(!trap_active)
+                        {
+                            ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                            trap_timer = 500;
+                            trap_active = true;
+                            trap_counter = 0;
+                            return gvr_fn_change_ball(TRANSFORM_SPEED_POTION, 0xFF, 0x01, 0x18);
+                        }
+                    }
+                    break;
+                case AP_STICKY_TRANSFORM:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        if(!trap_active)
+                        {
+                            ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                            trap_timer = 500;
+                            trap_active = true;
+                            trap_counter = 0;
+                            return gvr_fn_change_ball(TRANSFORM_STICKY_POTION, 0xFF, 0x01, 0x18);
+                        }
+                    }
+                    break;
+                case AP_FROG_TRANSFORM:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        if(!trap_active)
+                        {
+                            ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                            trap_timer = 500;
+                            trap_active = true;
+                            trap_counter = 0;
+                            return gvr_fn_change_ball(TRANSFORM_FROG_POTION, 0xFF, 0x01, 0x18);
+                        }
+                    }
+                    break;
+                case AP_BOOMERANG_TRANSFORM:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        if(!trap_active)
+                        {
+                            if(gvr_current_map != MAP_HUB1 && gvr_current_map != MAP_HUB2 && gvr_current_map != MAP_HUB3 &&
+                            gvr_current_map != MAP_HUB4 && gvr_current_map != MAP_HUB5 && gvr_current_map != MAP_HUB6 &&
+                            gvr_current_map != MAP_HUB7 && gvr_current_map != MAP_HUB8 && gvr_current_map != MAP_CASTLE_CAVE &&
+                            gvr_current_map != MAP_WAYROOM)
+                            {
+                                ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                                trap_timer = 500;
+                                trap_active = true;
+                                trap_counter = 0;
+                                return gvr_fn_change_ball(TRANSFORM_BOOMERANG_POTION, 0xFF, 0x01, 0x18);
+                            }
+                        }
+                    }
+                    break;
+                case AP_BEACHBALL_TRANSFORM:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        if(!trap_active)
+                        {
+                            if(gvr_current_map != MAP_HUB1 && gvr_current_map != MAP_HUB2 && gvr_current_map != MAP_HUB3 &&
+                            gvr_current_map != MAP_HUB4 && gvr_current_map != MAP_HUB5 && gvr_current_map != MAP_HUB6 &&
+                            gvr_current_map != MAP_HUB7 && gvr_current_map != MAP_HUB8 && gvr_current_map != MAP_CASTLE_CAVE &&
+                            gvr_current_map != MAP_WAYROOM)
+                            {
+                                ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                                trap_timer = 500;
+                                trap_active = true;
+                                trap_counter = 0;
+                                return gvr_fn_change_ball(TRANSFORM_BEACH_BALL, 0xFF, 0x01, 0x18);
+                            }
+                        }
+                    }
+                    break;
+                case AP_HELICOPTER_TRANSFORM:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        if(!trap_active)
+                        {
+                            ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                            trap_timer = 500;
+                            trap_active = true;
+                            return gvr_fn_change_ball(TRANSFORM_HELICOPTER_POTION, 0xFF, 0x01, 0x18);
+                        }
+                    }
+                    break;
+                case AP_DEATH_TRANSFORM:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {  
+                        if(!trap_active)
+                        {
+                            ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                            trap_timer = 500;
+                            trap_active = true;
+                            trap_counter = 0;
+                            return gvr_fn_change_ball(TRANSFORM_DEATH_POTION, 0xFF, 0x01, 0x18);
+                        }
+                    }
+                    break;
+                case AP_FROG_TRAP:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        if(!trap_active)
+                        {
+                            ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                            gvr_fn_glover_cheat(0x14, 1);
+                            trap_timer = 500;
+                            trap_active = true;
+                            is_cheat = true;
+                            trap_counter = 0;
+                        }
+                    }
+                    break;
+                case AP_CAMERA_TRAP:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_fn_glover_cheat(0x0C, 1);
+                        trap_active = true;
+                        trap_timer = 500;
+                        trap_counter = 0;
+                        is_cheat = true;
+                    }
+                    break;
+                case AP_CURSE_BALL:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        if(!trap_active)
+                        {
+                            ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                            gvr_fn_curse_ball(0x1F4, 0x80, 0x01, 0x18);   
+                            trap_active = true;
+                            trap_timer = 0x80;
+                            trap_counter = 0;
+                        }
+                    }
+                    break;
+                case AP_CBALL_TRAP:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        if(!trap_active)
+                        {
+                            ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                            gvr_fn_change_ball(TRANSFORM_CRYSTAL_BALL, 0x80, 0x1, 0x18);
+                            char *text = "YOU RECEIVED CRYSTAL B TRAP";
+                            DialogQueue(text);
+                            ap_memory.pc.send_text++;  
+                            trap_active = true;
+                            trap_timer = 0x80;
+                            trap_counter = 0;     
+                        }
+                    }
+                    break;
+                    case AP_OPEN_HUBS:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_fn_glover_cheat(0x18, 1);
+                    }
+                    break;
+                    case AP_OPEN_WORLDS:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_fn_glover_cheat(0x19, 1);
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
@@ -2226,9 +2205,9 @@ void DialogCheck()
         dialog_addr = display_dialog(0x0A0, 0xC0, 0xFF, 0xFF, 0xFF, 0xFF, 0.75, 0.75, 0, ap_memory.pc.text_queue[ap_memory.pc.n64_text].text, 1);
         timer = 65;
         ap_memory.pc.text_queue[ap_memory.pc.n64_text].text[0] = 0x00;
-        if(ap_memory.pc.n64_text == 49)
+        if(ap_memory.pc.n64_text == 99)
         {
-            ap_memory.pc.send_text -= 48;
+            ap_memory.pc.send_text -= 98;
             ap_memory.pc.n64_text = 0;
         }
     }
@@ -2240,9 +2219,9 @@ void DialogClear()
     {
         ap_memory.pc.n64_text++;
         ap_memory.pc.text_queue[ap_memory.pc.n64_text].text[0] = 0x00;
-        if(ap_memory.pc.n64_text == 49)
+        if(ap_memory.pc.n64_text == 99)
         {
-            ap_memory.pc.send_text -= 48;
+            ap_memory.pc.send_text -= 98;
             ap_memory.pc.n64_text = 0;
         }
     }
@@ -2250,9 +2229,9 @@ void DialogClear()
 
 void DialogQueue(char *text)
 {
-    if(ap_memory.pc.send_text + 1 == 49)
+    if(ap_memory.pc.send_text + 1 >= 99)
     {
-        for(int i = 1; i < 49; i++)
+        for(int i = 1; i < 99; i++)
         {
             if(ap_memory.pc.text_queue[i].text[0] == 0x00)
             {
@@ -2263,7 +2242,7 @@ void DialogQueue(char *text)
         return;
     }
     else{
-        for(int i = ap_memory.pc.send_text + 1; i < 49; i++)
+        for(int i = ap_memory.pc.send_text + 1; i < 99; i++)
         {
             if(ap_memory.pc.text_queue[i].text[0] == 0x00)
             {
@@ -2276,9 +2255,23 @@ void DialogQueue(char *text)
 
 void DialogTimer()
 {
+    if(dialog_addr == 0)
+    {
+        if(gvr_fade_var == 0)
+        {
+            ap_memory.pc.text_ready = 1;
+        }
+        return;
+    }
+    if(gvr_fade_var == 0x012C)
+    {
+        dialog_addr = 0;
+        return;
+    }
     if(timer != 0)
     {
         timer--;
+        
         u32 alpha_address = dialog_addr + 0x005B;
         switch (timer)
         {
@@ -2311,7 +2304,9 @@ void DialogTimer()
             break;
         case 0:
             (*(u8*) alpha_address) = 0x00;
+            gvr_fn_free_dialog(dialog_addr);
             ap_memory.pc.text_ready = 1;
+            dialog_addr = 0;
             break;
         default:
             break;
@@ -2326,8 +2321,24 @@ void TrapTimer()
         trap_timer--;
         if(trap_timer == 0)
         {
-            gvr_fn_glover_cheat(0x16, 1);
-            frogt = false;
+            trap_active = false;
+            if(is_cheat)
+            {
+                gvr_fn_glover_cheat(0x16, 1);
+                if(ap_memory.pc.items[AP_LOCATE_GARIB] > 0)
+                {
+                    gvr_fn_glover_cheat(0x0, 1);
+                }
+                if(ap_memory.pc.items[AP_OPEN_HUBS] > 0)
+                {
+                    gvr_fn_glover_cheat(0x18, 1);
+                }
+                else if(ap_memory.pc.items[AP_OPEN_WORLDS] > 0)
+                {
+                    gvr_fn_glover_cheat(0x19, 1);
+                }
+                is_cheat = false;
+            }
         }
     }
 }
@@ -2377,6 +2388,7 @@ void Goal()
             case 4:
                 if(!ap_memory.pc.worlds[level].goal)
                 {
+                    //gvr_wayroom_type = 0x0E - spawn_ball_hub; //TODO
                     gvr_wayroom_type = 0x0D;
                     spawn_ball_hub+=1;
                 }
@@ -2432,6 +2444,7 @@ void Goal()
             case 4:
                 if(!ap_memory.pc.worlds[level].goal)
                 {
+                    //gvr_wayroom_type = 0x0E - spawn_ball_hub;
                     gvr_wayroom_type = 0x0D;
                     spawn_ball_hub+=1;
                 }
@@ -2487,6 +2500,7 @@ void Goal()
             case 4:
                 if(!ap_memory.pc.worlds[level].goal)
                 {
+                    //gvr_wayroom_type = 0x0E - spawn_ball_hub;
                     gvr_wayroom_type = 0x0D;
                     spawn_ball_hub+=1;
                 }
@@ -2542,6 +2556,7 @@ void Goal()
             case 4:
                 if(!ap_memory.pc.worlds[level].goal)
                 {
+                    //gvr_wayroom_type = 0x0E - spawn_ball_hub;
                     gvr_wayroom_type = 0x0D;
                     spawn_ball_hub+=1;
                 }
@@ -2597,6 +2612,7 @@ void Goal()
             case 4:
                 if(!ap_memory.pc.worlds[level].goal)
                 {
+                    //gvr_wayroom_type = 0x0E - spawn_ball_hub;
                     gvr_wayroom_type = 0x0D;
                     spawn_ball_hub+=1;
                 }
@@ -2652,6 +2668,7 @@ void Goal()
             case 4:
                 if(!ap_memory.pc.worlds[level].goal)
                 {
+                    //gvr_wayroom_type = 0x0E - spawn_ball_hub;
                     gvr_wayroom_type = 0x0D;
                     spawn_ball_hub+=1;
                 }
@@ -2686,7 +2703,6 @@ void Goal()
     }
 }
 
-
 void UnlockStarWorld()
 {
     for(int level = 1; level < AP_MAX_WORLDS; level++)
@@ -2698,145 +2714,296 @@ void UnlockStarWorld()
         }
         if(!ap_memory.pc.worlds[level].star) //No boss levels
         {
-            if(ap_memory.pc.garib_totals[level] >= ap_memory.pc.max_garib_totals[level])
+            if(ap_memory.pc.settings.garib_logic == 0)
             {
-                ap_memory.pc.worlds[level].star = 1;
-                switch (ap_memory.pc.worlds[level].hub_entrance)
+                if(gvr_current_map != APWorldConverter(level))
                 {
-                    case 1:
-                        switch(ap_memory.pc.worlds[level].door)
-                        {
-                            case 1:
-                                gvr_perfect.atl_1 = 1;
-                                break;
-                            case 2:
-                                gvr_perfect.atl_2 = 1;
-                                break;
-                            case 3:
-                                gvr_perfect.atl_3 = 1;
-                                break;
-                            case 4:
-                                gvr_gates.atl_boss_defeated = 1;
-                                break;
-                            case 5:
-                                gvr_perfect.atl_bonus = 1;
-                                break;
-                            default:
-                                break;
-                        }
-                        break;
-                    case 2:
-                        switch(ap_memory.pc.worlds[level].door)
-                        {
-                            case 1:
-                                gvr_perfect.carn_1 = 1;
-                                break;
-                            case 2:
-                                gvr_perfect.carn_2 = 1;
-                                break;
-                            case 3:
-                                gvr_perfect.carn_3 = 1;
-                                break;
-                            case 4:
-                                gvr_gates.carn_boss_defeated = 1;
-                                break;
-                            case 5:
-                                gvr_perfect.carn_bonus = 1;
-                                break;
-                            default:
-                                break;
-                        }
-                        break;
-                    case 3:
-                        switch(ap_memory.pc.worlds[level].door)
-                        {
-                            case 1:
-                                gvr_perfect.pir_1 = 1;
-                                break;
-                            case 2:
-                                gvr_perfect.pir_2 = 1;
-                                break;
-                            case 3:
-                                gvr_perfect.pir_3 = 1;
-                                break;
-                            case 4:
-                                gvr_gates.pir_boss_defeated = 1;
-                                break;
-                            case 5:
-                                gvr_perfect.pir_bonus = 1;
-                                break;
-                            default:
-                                break;
-                        }
-                        break;
-                    case 4:
-                        switch(ap_memory.pc.worlds[level].door)
-                        {
-                            case 1:
-                                gvr_perfect.pre_1 = 1;
-                                break;
-                            case 2:
-                                gvr_perfect.pre_2 = 1;
-                                break;
-                            case 3:
-                                gvr_perfect.pre_3 = 1;
-                                break;
-                            case 4:
-                                gvr_gates.pre_boss_defeated = 1;
-                                break;
-                            case 5:
-                                gvr_perfect.pre_bonus = 1;
-                                break;
-                            default:
-                                break;
-                        }
-                        break;
-                    case 5:
-                        switch(ap_memory.pc.worlds[level].door)
-                        {
-                            case 1:
-                                gvr_perfect.fof_1 = 1;
-                                break;
-                            case 2:
-                                gvr_perfect.fof_2 = 1;
-                                break;
-                            case 3:
-                                gvr_perfect.fof_3 = 1;
-                                break;
-                            case 4:
-                                gvr_gates.fort_boss_defeated = 1;
-                                break;
-                            case 5:
-                                gvr_perfect.fof_bonus = 1;
-                                break;
-                            default:
-                                break;
-                        }
-                        break;
-                    case 6:
-                        switch(ap_memory.pc.worlds[level].door)
-                        {
-                            case 1:
-                                gvr_perfect.spc_1 = 1;
-                                break;
-                            case 2:
-                                gvr_perfect.spc_2 = 1;
-                                break;
-                            case 3:
-                                gvr_perfect.spc_3 = 1;
-                                break;
-                            case 4:
-                                gvr_gates.spc_boss_defeated = 1;
-                                break;
-                            case 5:
-                                gvr_perfect.spc_bonus = 1;
-                                break;
-                            default:
-                                break;
-                        }
-                        break;
-                    default:
-                        break;
+                    continue;
+                }
+                if(gvr_collected_garibs >= ap_memory.pc.max_garib_totals[level])
+                {
+                    ap_memory.pc.worlds[level].star = 1;
+                    switch (ap_memory.pc.worlds[level].hub_entrance)
+                    {
+                        case 1:
+                            switch(ap_memory.pc.worlds[level].door)
+                            {
+                                case 1:
+                                    gvr_perfect.atl_1 = 1;
+                                    break;
+                                case 2:
+                                    gvr_perfect.atl_2 = 1;
+                                    break;
+                                case 3:
+                                    gvr_perfect.atl_3 = 1;
+                                    break;
+                                case 4:
+                                    gvr_gates.atl_boss_defeated = 1;
+                                    break;
+                                case 5:
+                                    gvr_perfect.atl_bonus = 1;
+                                    break;
+                                default:
+                                    break;
+                            }
+                            break;
+                        case 2:
+                            switch(ap_memory.pc.worlds[level].door)
+                            {
+                                case 1:
+                                    gvr_perfect.carn_1 = 1;
+                                    break;
+                                case 2:
+                                    gvr_perfect.carn_2 = 1;
+                                    break;
+                                case 3:
+                                    gvr_perfect.carn_3 = 1;
+                                    break;
+                                case 4:
+                                    gvr_gates.carn_boss_defeated = 1;
+                                    break;
+                                case 5:
+                                    gvr_perfect.carn_bonus = 1;
+                                    break;
+                                default:
+                                    break;
+                            }
+                            break;
+                        case 3:
+                            switch(ap_memory.pc.worlds[level].door)
+                            {
+                                case 1:
+                                    gvr_perfect.pir_1 = 1;
+                                    break;
+                                case 2:
+                                    gvr_perfect.pir_2 = 1;
+                                    break;
+                                case 3:
+                                    gvr_perfect.pir_3 = 1;
+                                    break;
+                                case 4:
+                                    gvr_gates.pir_boss_defeated = 1;
+                                    break;
+                                case 5:
+                                    gvr_perfect.pir_bonus = 1;
+                                    break;
+                                default:
+                                    break;
+                            }
+                            break;
+                        case 4:
+                            switch(ap_memory.pc.worlds[level].door)
+                            {
+                                case 1:
+                                    gvr_perfect.pre_1 = 1;
+                                    break;
+                                case 2:
+                                    gvr_perfect.pre_2 = 1;
+                                    break;
+                                case 3:
+                                    gvr_perfect.pre_3 = 1;
+                                    break;
+                                case 4:
+                                    gvr_gates.pre_boss_defeated = 1;
+                                    break;
+                                case 5:
+                                    gvr_perfect.pre_bonus = 1;
+                                    break;
+                                default:
+                                    break;
+                            }
+                            break;
+                        case 5:
+                            switch(ap_memory.pc.worlds[level].door)
+                            {
+                                case 1:
+                                    gvr_perfect.fof_1 = 1;
+                                    break;
+                                case 2:
+                                    gvr_perfect.fof_2 = 1;
+                                    break;
+                                case 3:
+                                    gvr_perfect.fof_3 = 1;
+                                    break;
+                                case 4:
+                                    gvr_gates.fort_boss_defeated = 1;
+                                    break;
+                                case 5:
+                                    gvr_perfect.fof_bonus = 1;
+                                    break;
+                                default:
+                                    break;
+                            }
+                            break;
+                        case 6:
+                            switch(ap_memory.pc.worlds[level].door)
+                            {
+                                case 1:
+                                    gvr_perfect.spc_1 = 1;
+                                    break;
+                                case 2:
+                                    gvr_perfect.spc_2 = 1;
+                                    break;
+                                case 3:
+                                    gvr_perfect.spc_3 = 1;
+                                    break;
+                                case 4:
+                                    gvr_gates.spc_boss_defeated = 1;
+                                    break;
+                                case 5:
+                                    gvr_perfect.spc_bonus = 1;
+                                    break;
+                                default:
+                                    break;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                if(ap_memory.pc.garib_totals[level] >= ap_memory.pc.max_garib_totals[level])
+                {
+                    ap_memory.pc.worlds[level].star = 1;
+                    switch (ap_memory.pc.worlds[level].hub_entrance)
+                    {
+                        case 1:
+                            switch(ap_memory.pc.worlds[level].door)
+                            {
+                                case 1:
+                                    gvr_perfect.atl_1 = 1;
+                                    break;
+                                case 2:
+                                    gvr_perfect.atl_2 = 1;
+                                    break;
+                                case 3:
+                                    gvr_perfect.atl_3 = 1;
+                                    break;
+                                case 4:
+                                    gvr_gates.atl_boss_defeated = 1;
+                                    break;
+                                case 5:
+                                    gvr_perfect.atl_bonus = 1;
+                                    break;
+                                default:
+                                    break;
+                            }
+                            break;
+                        case 2:
+                            switch(ap_memory.pc.worlds[level].door)
+                            {
+                                case 1:
+                                    gvr_perfect.carn_1 = 1;
+                                    break;
+                                case 2:
+                                    gvr_perfect.carn_2 = 1;
+                                    break;
+                                case 3:
+                                    gvr_perfect.carn_3 = 1;
+                                    break;
+                                case 4:
+                                    gvr_gates.carn_boss_defeated = 1;
+                                    break;
+                                case 5:
+                                    gvr_perfect.carn_bonus = 1;
+                                    break;
+                                default:
+                                    break;
+                            }
+                            break;
+                        case 3:
+                            switch(ap_memory.pc.worlds[level].door)
+                            {
+                                case 1:
+                                    gvr_perfect.pir_1 = 1;
+                                    break;
+                                case 2:
+                                    gvr_perfect.pir_2 = 1;
+                                    break;
+                                case 3:
+                                    gvr_perfect.pir_3 = 1;
+                                    break;
+                                case 4:
+                                    gvr_gates.pir_boss_defeated = 1;
+                                    break;
+                                case 5:
+                                    gvr_perfect.pir_bonus = 1;
+                                    break;
+                                default:
+                                    break;
+                            }
+                            break;
+                        case 4:
+                            switch(ap_memory.pc.worlds[level].door)
+                            {
+                                case 1:
+                                    gvr_perfect.pre_1 = 1;
+                                    break;
+                                case 2:
+                                    gvr_perfect.pre_2 = 1;
+                                    break;
+                                case 3:
+                                    gvr_perfect.pre_3 = 1;
+                                    break;
+                                case 4:
+                                    gvr_gates.pre_boss_defeated = 1;
+                                    break;
+                                case 5:
+                                    gvr_perfect.pre_bonus = 1;
+                                    break;
+                                default:
+                                    break;
+                            }
+                            break;
+                        case 5:
+                            switch(ap_memory.pc.worlds[level].door)
+                            {
+                                case 1:
+                                    gvr_perfect.fof_1 = 1;
+                                    break;
+                                case 2:
+                                    gvr_perfect.fof_2 = 1;
+                                    break;
+                                case 3:
+                                    gvr_perfect.fof_3 = 1;
+                                    break;
+                                case 4:
+                                    gvr_gates.fort_boss_defeated = 1;
+                                    break;
+                                case 5:
+                                    gvr_perfect.fof_bonus = 1;
+                                    break;
+                                default:
+                                    break;
+                            }
+                            break;
+                        case 6:
+                            switch(ap_memory.pc.worlds[level].door)
+                            {
+                                case 1:
+                                    gvr_perfect.spc_1 = 1;
+                                    break;
+                                case 2:
+                                    gvr_perfect.spc_2 = 1;
+                                    break;
+                                case 3:
+                                    gvr_perfect.spc_3 = 1;
+                                    break;
+                                case 4:
+                                    gvr_gates.spc_boss_defeated = 1;
+                                    break;
+                                case 5:
+                                    gvr_perfect.spc_bonus = 1;
+                                    break;
+                                default:
+                                    break;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
         }
@@ -2877,6 +3044,582 @@ void UnlockSecret()
                 case 2:
                     gvr_gates.carn_door_bonus = 1;
                     ap_memory.pc.secret_unlock[hub] = 1;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+}
+
+void ClearObjPtrs()
+{
+    if (gvr_current_map == MAP_WAYROOM)
+    {
+        for(int world = 1; world < AP_MAX_WORLDS; world++)
+        {
+            switch (world) {
+                case AP_ATLANTIS_L1:
+                    for(int i = 0; i < ap_memory.pc.max_garib_totals[world]; i++) // Garibs
+                    {
+                        ap_memory.pc.worlds[world].garibs[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 3; i++) // Life
+                    {
+                        ap_memory.pc.worlds[world].life_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 5; i++) // Tip
+                    {
+                        ap_memory.pc.worlds[world].tip_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 2; i++) // Checkpoint
+                    {
+                        ap_memory.pc.worlds[world].checkpoint_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 1; i++) // Switch
+                    {
+                        ap_memory.pc.worlds[world].switch_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 4; i++) // Enemy
+                    {
+                        ap_memory.pc.worlds[world].enemy_checks[i].ptr = 0;
+                    }
+                    break;
+                case AP_ATLANTIS_L2:
+                    for(int i = 0; i < ap_memory.pc.max_garib_totals[world]; i++) // Garibs
+                    {
+                        ap_memory.pc.worlds[world].garibs[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 1; i++) // Life
+                    {
+                        ap_memory.pc.worlds[world].life_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 1; i++) // Tip
+                    {
+                        ap_memory.pc.worlds[world].tip_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 3; i++) // Checkpoint
+                    {
+                        ap_memory.pc.worlds[world].checkpoint_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 3; i++) // Switch
+                    {
+                        ap_memory.pc.worlds[world].switch_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 6; i++) // Enemy
+                    {
+                        ap_memory.pc.worlds[world].enemy_checks[i].ptr = 0;
+                    }
+                    break;
+                case AP_ATLANTIS_L3:
+                    for(int i = 0; i < ap_memory.pc.max_garib_totals[world]; i++) // Garibs
+                    {
+                        ap_memory.pc.worlds[world].garibs[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 5; i++) // Life
+                    {
+                        ap_memory.pc.worlds[world].life_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 3; i++) // Checkpoint
+                    {
+                        ap_memory.pc.worlds[world].checkpoint_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 3; i++) // Switch
+                    {
+                        ap_memory.pc.worlds[world].switch_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 14; i++) // Enemy
+                    {
+                        ap_memory.pc.worlds[world].enemy_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 2; i++) // Potions
+                    {
+                        ap_memory.pc.worlds[world].potion_checks[i].ptr = 0;
+                    }
+                    break;
+                case AP_ATLANTIS_BONUS:
+                    for(int i = 0; i < ap_memory.pc.max_garib_totals[world]; i++) // Garibs
+                    {
+                        ap_memory.pc.worlds[world].garibs[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 1; i++) // Life
+                    {
+                        ap_memory.pc.worlds[world].life_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 3; i++) // Enemy
+                    {
+                        ap_memory.pc.worlds[world].enemy_checks[i].ptr = 0;
+                    }
+                    break;
+                case AP_CARNIVAL_L1:
+                    for(int i = 0; i < ap_memory.pc.max_garib_totals[world]; i++) // Garibs
+                    {
+                        ap_memory.pc.worlds[world].garibs[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 4; i++) // Life
+                    {
+                        ap_memory.pc.worlds[world].life_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 4; i++) // Tip
+                    {
+                        ap_memory.pc.worlds[world].tip_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 4; i++) // Checkpoint
+                    {
+                        ap_memory.pc.worlds[world].checkpoint_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 9; i++) // Switch
+                    {
+                        ap_memory.pc.worlds[world].switch_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 13; i++) // Enemy
+                    {
+                        ap_memory.pc.worlds[world].enemy_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 2; i++) // Potions
+                    {
+                        ap_memory.pc.worlds[world].potion_checks[i].ptr = 0;
+                    }
+                    break;
+                case AP_CARNIVAL_L2:
+                    for(int i = 0; i < ap_memory.pc.max_garib_totals[world]; i++) // Garibs
+                    {
+                        ap_memory.pc.worlds[world].garibs[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 3; i++) // Life
+                    {
+                        ap_memory.pc.worlds[world].life_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 1; i++) // Tip
+                    {
+                        ap_memory.pc.worlds[world].tip_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 5; i++) // Checkpoint
+                    {
+                        ap_memory.pc.worlds[world].checkpoint_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 3; i++) // Switch
+                    {
+                        ap_memory.pc.worlds[world].switch_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 7; i++) // Enemy
+                    {
+                        ap_memory.pc.worlds[world].enemy_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 3; i++) // Potions
+                    {
+                        ap_memory.pc.worlds[world].potion_checks[i].ptr = 0;
+                    }
+                    break;
+                case AP_CARNIVAL_L3:
+                    for(int i = 0; i < ap_memory.pc.max_garib_totals[world]; i++) // Garibs
+                    {
+                        ap_memory.pc.worlds[world].garibs[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 10; i++) // Life
+                    {
+                        ap_memory.pc.worlds[world].life_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 4; i++) // Checkpoint
+                    {
+                        ap_memory.pc.worlds[world].checkpoint_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 2; i++) // Switch
+                    {
+                        ap_memory.pc.worlds[world].switch_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 14; i++) // Enemy
+                    {
+                        ap_memory.pc.worlds[world].enemy_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 2; i++) // Potions
+                    {
+                        ap_memory.pc.worlds[world].potion_checks[i].ptr = 0;
+                    }
+                    break;
+                case AP_CARNIVAL_BONUS:
+                    for(int i = 0; i < ap_memory.pc.max_garib_totals[world]; i++) // Garibs
+                    {
+                        ap_memory.pc.worlds[world].garibs[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 2; i++) // Life
+                    {
+                        ap_memory.pc.worlds[world].life_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 4; i++) // Checkpoint
+                    {
+                        ap_memory.pc.worlds[world].checkpoint_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 2; i++) // Switch
+                    {
+                        ap_memory.pc.worlds[world].switch_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 14; i++) // Enemy
+                    {
+                        ap_memory.pc.worlds[world].enemy_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 2; i++) // Potions
+                    {
+                        ap_memory.pc.worlds[world].potion_checks[i].ptr = 0;
+                    }
+                    break;
+                case AP_PIRATES_L1:
+                    for(int i = 0; i < ap_memory.pc.max_garib_totals[world]; i++) // Garibs
+                    {
+                        ap_memory.pc.worlds[world].garibs[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 4; i++) // Life
+                    {
+                        ap_memory.pc.worlds[world].life_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 1; i++) // Tip
+                    {
+                        ap_memory.pc.worlds[world].tip_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 3; i++) // Checkpoint
+                    {
+                        ap_memory.pc.worlds[world].checkpoint_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 8; i++) // Switch
+                    {
+                        ap_memory.pc.worlds[world].switch_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 11; i++) // Enemy
+                    {
+                        ap_memory.pc.worlds[world].enemy_checks[i].ptr = 0;
+                    }
+                    break;
+                case AP_PIRATES_L2:
+                    for(int i = 0; i < ap_memory.pc.max_garib_totals[world]; i++) // Garibs
+                    {
+                        ap_memory.pc.worlds[world].garibs[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 3; i++) // Life
+                    {
+                        ap_memory.pc.worlds[world].life_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 3; i++) // Checkpoint
+                    {
+                        ap_memory.pc.worlds[world].checkpoint_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 3; i++) // Switch
+                    {
+                        ap_memory.pc.worlds[world].switch_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 10; i++) // Enemy
+                    {
+                        ap_memory.pc.worlds[world].enemy_checks[i].ptr = 0;
+                    }
+                    break;
+                case AP_PIRATES_L3:
+                    for(int i = 0; i < ap_memory.pc.max_garib_totals[world]; i++) // Garibs
+                    {
+                        ap_memory.pc.worlds[world].garibs[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 6; i++) // Life
+                    {
+                        ap_memory.pc.worlds[world].life_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 1; i++) // Tip
+                    {
+                        ap_memory.pc.worlds[world].tip_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 4; i++) // Checkpoint
+                    {
+                        ap_memory.pc.worlds[world].checkpoint_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 4; i++) // Switch
+                    {
+                        ap_memory.pc.worlds[world].switch_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 10; i++) // Enemy
+                    {
+                        ap_memory.pc.worlds[world].enemy_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 2; i++) // Potions
+                    {
+                        ap_memory.pc.worlds[world].potion_checks[i].ptr = 0;
+                    }
+                    break;
+                case AP_PIRATES_BONUS:
+                    for(int i = 0; i < ap_memory.pc.max_garib_totals[world]; i++) // Garibs
+                    {
+                        ap_memory.pc.worlds[world].garibs[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 4; i++) // Life
+                    {
+                        ap_memory.pc.worlds[world].life_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 1; i++) // Enemy
+                    {
+                        ap_memory.pc.worlds[world].enemy_checks[i].ptr = 0;
+                    }
+                    break;
+                case AP_PREHISTORIC_L1:
+                    for(int i = 0; i < ap_memory.pc.max_garib_totals[world]; i++) // Garibs
+                    {
+                        ap_memory.pc.worlds[world].garibs[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 4; i++) // Life
+                    {
+                        ap_memory.pc.worlds[world].life_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 3; i++) // Checkpoint
+                    {
+                        ap_memory.pc.worlds[world].checkpoint_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 1; i++) // Switch
+                    {
+                        ap_memory.pc.worlds[world].switch_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 2; i++) // Enemy
+                    {
+                        ap_memory.pc.worlds[world].enemy_checks[i].ptr = 0;
+                    }
+                    break;
+                case AP_PREHISTORIC_L2:
+                    for(int i = 0; i < ap_memory.pc.max_garib_totals[world]; i++) // Garibs
+                    {
+                        ap_memory.pc.worlds[world].garibs[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 5; i++) // Life
+                    {
+                        ap_memory.pc.worlds[world].life_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 4; i++) // Checkpoint
+                    {
+                        ap_memory.pc.worlds[world].checkpoint_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 3; i++) // Switch
+                    {
+                        ap_memory.pc.worlds[world].switch_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 7; i++) // Enemy
+                    {
+                        ap_memory.pc.worlds[world].enemy_checks[i].ptr = 0;
+                    }
+                    break;
+                case AP_PREHISTORIC_L3:
+                    for(int i = 0; i < ap_memory.pc.max_garib_totals[world]; i++) // Garibs
+                    {
+                        ap_memory.pc.worlds[world].garibs[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 3; i++) // Life
+                    {
+                        ap_memory.pc.worlds[world].life_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 4; i++) // Checkpoint
+                    {
+                        ap_memory.pc.worlds[world].checkpoint_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 10; i++) // Switch
+                    {
+                        ap_memory.pc.worlds[world].switch_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 4; i++) // Enemy
+                    {
+                        ap_memory.pc.worlds[world].enemy_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 3; i++) // Potions
+                    {
+                        ap_memory.pc.worlds[world].potion_checks[i].ptr = 0;
+                    }
+                    break;
+                case AP_PREHISTORIC_BONUS:
+                    for(int i = 0; i < ap_memory.pc.max_garib_totals[world]; i++) // Garibs
+                    {
+                        ap_memory.pc.worlds[world].garibs[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 4; i++) // Life
+                    {
+                        ap_memory.pc.worlds[world].life_checks[i].ptr = 0;
+                    }
+                    break;
+                case AP_FORTRESS_L1:
+                    for(int i = 0; i < ap_memory.pc.max_garib_totals[world]; i++) // Garibs
+                    {
+                        ap_memory.pc.worlds[world].garibs[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 4; i++) // Life
+                    {
+                        ap_memory.pc.worlds[world].life_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 3; i++) // Checkpoint
+                    {
+                        ap_memory.pc.worlds[world].checkpoint_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 5; i++) // Switch
+                    {
+                        ap_memory.pc.worlds[world].switch_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 7; i++) // Enemy
+                    {
+                        ap_memory.pc.worlds[world].enemy_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 6; i++) // Potions
+                    {
+                        ap_memory.pc.worlds[world].potion_checks[i].ptr = 0;
+                    }
+                    break;
+                case AP_FORTRESS_L2:
+                    for(int i = 0; i < ap_memory.pc.max_garib_totals[world]; i++) // Garibs
+                    {
+                        ap_memory.pc.worlds[world].garibs[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 5; i++) // Life
+                    {
+                        ap_memory.pc.worlds[world].life_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 1; i++) // Tip
+                    {
+                        ap_memory.pc.worlds[world].tip_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 3; i++) // Checkpoint
+                    {
+                        ap_memory.pc.worlds[world].checkpoint_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 4; i++) // Switch
+                    {
+                        ap_memory.pc.worlds[world].switch_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 2; i++) // Enemy
+                    {
+                        ap_memory.pc.worlds[world].enemy_checks[i].ptr = 0;
+                    }
+                    break;
+                case AP_FORTRESS_L3:
+                    for(int i = 0; i < ap_memory.pc.max_garib_totals[world]; i++) // Garibs
+                    {
+                        ap_memory.pc.worlds[world].garibs[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 7; i++) // Life
+                    {
+                        ap_memory.pc.worlds[world].life_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 5; i++) // Checkpoint
+                    {
+                        ap_memory.pc.worlds[world].checkpoint_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 2; i++) // Switch
+                    {
+                        ap_memory.pc.worlds[world].switch_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 7; i++) // Enemy
+                    {
+                        ap_memory.pc.worlds[world].enemy_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 1; i++) // Potions
+                    {
+                        ap_memory.pc.worlds[world].potion_checks[i].ptr = 0;
+                    }
+                    break;
+                case AP_FORTRESS_BONUS:
+                    for(int i = 0; i < ap_memory.pc.max_garib_totals[world]; i++) // Garibs
+                    {
+                        ap_memory.pc.worlds[world].garibs[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 1; i++) // Life
+                    {
+                        ap_memory.pc.worlds[world].life_checks[i].ptr = 0;
+                    }
+                    break;
+                case AP_SPACE_L1:
+                    for(int i = 0; i < ap_memory.pc.max_garib_totals[world]; i++) // Garibs
+                    {
+                        ap_memory.pc.worlds[world].garibs[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 2; i++) // Life
+                    {
+                        ap_memory.pc.worlds[world].life_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 2; i++) // Checkpoint
+                    {
+                        ap_memory.pc.worlds[world].checkpoint_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 6; i++) // Switch
+                    {
+                        ap_memory.pc.worlds[world].switch_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 6; i++) // Enemy
+                    {
+                        ap_memory.pc.worlds[world].enemy_checks[i].ptr = 0;
+                    }
+                    break;
+                case AP_SPACE_L2:
+                    for(int i = 0; i < ap_memory.pc.max_garib_totals[world]; i++) // Garibs
+                    {
+                        ap_memory.pc.worlds[world].garibs[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 1; i++) // Life
+                    {
+                        ap_memory.pc.worlds[world].life_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 1; i++) // Checkpoint
+                    {
+                        ap_memory.pc.worlds[world].checkpoint_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 3; i++) // Switch
+                    {
+                        ap_memory.pc.worlds[world].switch_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 7; i++) // Enemy
+                    {
+                        ap_memory.pc.worlds[world].enemy_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 1; i++) // Potions
+                    {
+                        ap_memory.pc.worlds[world].potion_checks[i].ptr = 0;
+                    }
+                    break;
+                case AP_SPACE_L3:
+                    for(int i = 0; i < ap_memory.pc.max_garib_totals[world]; i++) // Garibs
+                    {
+                        ap_memory.pc.worlds[world].garibs[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 1; i++) // Life
+                    {
+                        ap_memory.pc.worlds[world].life_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 4; i++) // Checkpoint
+                    {
+                        ap_memory.pc.worlds[world].checkpoint_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 6; i++) // Switch
+                    {
+                        ap_memory.pc.worlds[world].switch_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 4; i++) // Enemy
+                    {
+                        ap_memory.pc.worlds[world].enemy_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 1; i++) // Potions
+                    {
+                        ap_memory.pc.worlds[world].potion_checks[i].ptr = 0;
+                    }
+                    break;
+                case AP_SPACE_BONUS:
+                    for(int i = 0; i < ap_memory.pc.max_garib_totals[world]; i++) // Garibs
+                    {
+                        ap_memory.pc.worlds[world].garibs[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 6; i++) // Life
+                    {
+                        ap_memory.pc.worlds[world].life_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 9; i++) // Potions
+                    {
+                        ap_memory.pc.worlds[world].potion_checks[i].ptr = 0;
+                    }
+                    break;
+                case AP_TRAINING_WORLD:
+                    for(int i = 0; i < 3; i++) // Switch
+                    {
+                        ap_memory.pc.worlds[world].switch_checks[i].ptr = 0;
+                    }
+                    for(int i = 0; i < 15; i++) // Tip
+                    {
+                        ap_memory.pc.worlds[world].tip_checks[i].ptr = 0;
+                    }
                     break;
                 default:
                     break;

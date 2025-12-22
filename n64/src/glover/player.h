@@ -50,6 +50,7 @@
     #define gvr_collected_garibs (*(u32*) 0x8029018C)
     #define gvr_current_lives (*(u32*) 0x80290190)
     #define gvr_current_health (*(u32*) 0x80290194)
+    #define gvr_score (*(u32*)0x80290188)
 
     typedef void (*gvr_fnt_respawn)();
     #define gvr_fn_respawn ((gvr_fnt_respawn)0x8017479C)

@@ -112,7 +112,17 @@ typedef struct {
     typedef void (*gvr_fnt_chicken)(u32 ptr1, u32 ptr2);
     #define gvr_fn_chicken ((gvr_fnt_chicken)0x80148EBC)
 
-    typedef void (*gvr_fnt_sounds)(u16 sound_id, u16 volume, u8 eighty, u8 zero);
+    typedef u32 (*gvr_fnt_sounds)(u16 sound_id, u16 volume, u8 eighty, u8 zero);
     #define gvr_fn_sounds ((gvr_fnt_sounds)0x801C08E4)
+
+    typedef void (*gvr_fnt_sound_pitch)(u32 sound_ptr, u32 pitch);
+    #define gvr_fn_sound_pitch ((gvr_fnt_sound_pitch)0x801C0D40)
+
+    typedef void (*gvr_fnt_free_dialog)(u32 ptr);
+    #define gvr_fn_free_dialog ((gvr_fnt_free_dialog)0x80145CEC)
+
+    typedef void (*gvr_fnt_garib_sounds)(u32 unknown);
+    #define gvr_fn_garib_sounds ((gvr_fnt_garib_sounds)0x8018E260)
+
 
 #endif

@@ -481,7 +481,6 @@ void CollectedLifePirates2(u32 ptr)
             if((u32)ap_memory.pc.worlds[AP_PIRATES_L2].life_checks[i].ptr == ptr)
             {
                 garib_life_t* object = (garib_life_t*) ptr;
-                object->type = 0;
                 ap_memory.pc.worlds[AP_PIRATES_L2].life_checks[i].collected = 1;
                 ap_memory.pc.worlds[AP_PIRATES_L2].life_checks[i].ptr = 0;
             }

@@ -357,7 +357,6 @@ void CollectedLifeSpaceBONUS(u32 ptr)
             if((u32)ap_memory.pc.worlds[AP_SPACE_BONUS].life_checks[i].ptr == ptr)
             {
                 garib_life_t* object = (garib_life_t*) ptr;
-                object->type = 0;
                 ap_memory.pc.worlds[AP_SPACE_BONUS].life_checks[i].collected = 1;
                 ap_memory.pc.worlds[AP_SPACE_BONUS].life_checks[i].ptr = 0;
             }

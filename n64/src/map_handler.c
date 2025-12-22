@@ -173,12 +173,16 @@ void BacktoHub()
         gvr_wayroom_type = APHubConverter(ap_memory.pc.worlds[ap_memory.pc.current_world_key].hub_entrance);
         gvr_max_garibs = 0x0;
     }
-    if(gvr_current_map == MAP_HUB1) //Skip Intro
+    if(gvr_current_map == MAP_HUB1 && spawn_ball_hub == 0) //Skip Intro
     {
         gvr_current_map = MAP_HUB2;
         spawn_ball_hub += 1;
     }
-    if(gvr_wayroom_type == 0x0D && gvr_atlantis_bonus_completed == 0x03) // Beat Training Ground
+    else if (gvr_current_map == MAP_HUB1)
+    {
+        gvr_current_map = MAP_HUB2;
+    }
+    if(gvr_wayroom_type == 0x0D && gvr_atlantis_bonus_completed == 0x03 && gvr_current_map == MAP_TRAINING) // Beat Training Ground
     {
         Goal();
     }

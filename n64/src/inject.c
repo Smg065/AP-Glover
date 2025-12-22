@@ -5,6 +5,7 @@
 #include "map_handler.h"
 #include "worlds.h"
 #include "tools.h"
+#include "sfx.h"
 
 bool init = false;
 bool gotdjump = false;
@@ -19,7 +20,7 @@ void watch_controls()
   if(gvr_controls.DPAD_L && !dpad_pressed) {
     if(ap_memory.pc.items[AP_DEBUG])
     {
-      gvr_fn_glover_died();
+      ap_memory.pc.items[AP_FROG_TRAP]++;
     }
     dpad_pressed = true;
   }
@@ -31,7 +32,7 @@ void watch_controls()
     dpad_pressed = true;
   }
   else if(gvr_controls.DPAD_U && !dpad_pressed) {
-
+    //ap_memory.pc.items[AP_DEBUG] = 1;
     dpad_pressed = true;
   }
   else if(gvr_controls.DPAD_D && !dpad_pressed) {
@@ -67,6 +68,7 @@ void pre_loop()
 {
   if(!init)
   {
+    csrand(12212);
     ap_memory.pc.version_major = 1;
     ap_memory.pc.version_minor = 0;
     ap_memory.pc.version_patch = 0;
@@ -80,8 +82,10 @@ void pre_loop()
   }
   if(gvr_fade_var == 0 && gvr_loaded_timer > 0 && gvr_bosscutscene == 0)
   {
-    CheckReceivedAPItems();
+    CheckSensitiveReceivedAPItems();
+    TrapTimer();
   }
+  CheckReceivedAPItems();
   if(!ap_memory.pc.items[AP_DOUBLE_JUMP])
   {
     gvr_double_jumping = true;
@@ -125,7 +129,6 @@ void pre_loop()
   }
   
   
-  TrapTimer();
   SetAPGaribs();
   watch_controls();
   force_ball();
@@ -369,13 +372,9 @@ bool can_input(u32 input)
       }
       return false;
     }
-    else if(input == 0x00000020)
+    else if(input == 0x00000020) // R
     {
-      if(ap_memory.pc.items[AP_LOCATE_GARIB])
-      {
-        return gvr_fn_input_handler(input);
-      }
-      return false;
+      return gvr_fn_input_handler(input);
     }
     else if(input == 0x0000000E)
     {
@@ -996,6 +995,7 @@ void collect_tiphats(u32 unknown, u32 ram_ptr_plus_8, u8 unknown2, u16 be)
 void init_checkpoint(u32 ram_ptr_plus_1c, u32 unkown_ptr, u8 iteration_num, u16 item_id)
 {
   u32 real_obj_ptr = ram_ptr_plus_1c - 0x001C;
+  ClearObjPtrs();
   CheckpointAtlantis1(real_obj_ptr, item_id);
   CheckpointAtlantis2(real_obj_ptr, item_id);
   CheckpointAtlantis3(real_obj_ptr, item_id);
@@ -1289,13 +1289,94 @@ u32 TipText(u32 orig_txt_ptr)
 
 void force_change_ball(u32 balltype)
 {
+  if((u32) animation_ptr->animations != 0x0)
+  {
+    if(animation_ptr->animations->current_animation == 0x002B)
+    {
+        return gvr_fn_change_balltype(balltype);
+    }
+  }
   ap_memory.pc.forcechange = true;
   return gvr_fn_change_balltype(balltype);
+}
+
+void garib_sounds(u32 unknown)
+{
+  if(ap_memory.pc.settings.random_sounds)
+  {
+    playSFX();
+    gvr_fn_garib_sounds(unknown);
+  }
+  else
+  {
+    u32 prior_score = gvr_score;
+    gvr_fn_garib_sounds(unknown);
+    u32 score_increase = gvr_score - prior_score;
+    u32 sound = 0;
+    switch (score_increase)
+    {
+      //Glover
+    case 10:
+      sound = gvr_fn_sounds(0x8C, 0x99, 0x83, 0);
+      gvr_fn_sound_pitch(sound, 0x00000000);
+      break;
+    case 20:
+      sound = gvr_fn_sounds(0x8C, 0x99, 0x7B, 0);
+      gvr_fn_sound_pitch(sound, 0x3F4CCCCD);
+      break;
+    case 50:
+      sound = gvr_fn_sounds(0x8C, 0x99, 0x7F, 0);
+      gvr_fn_sound_pitch(sound, 0x3FCCCCCD);
+      break;
+    case 100:
+      sound = gvr_fn_sounds(0x8C, 0x99, 0x76, 0);
+      gvr_fn_sound_pitch(sound, 0x4019999A);   
+      break;
+    
+      case 500:
+      sound = gvr_fn_sounds(0x8C, 0x99, 0x76, 0);
+      gvr_fn_sound_pitch(sound, 0x40800000);   
+      break;
+
+    case 40:
+      sound = gvr_fn_sounds(0x91, 0x99, 0x82, 0); //Crystal
+      gvr_fn_sound_pitch(sound, 0x3F4CCCCD);
+      break;
+    case 200:
+      sound = gvr_fn_sounds(0x91, 0x99, 0x88, 0); //Crystal
+      gvr_fn_sound_pitch(sound, 0x4019999A);
+      break;
+    case 1000:
+      sound = gvr_fn_sounds(0x91, 0x99, 0x7F, 0); //Crystal
+      gvr_fn_sound_pitch(sound, 0x40800000);
+      break;
+    default:
+      break;
+    }
+  }
+}
+
+void PlatformSwitch(u32 platform_ptr)
+{
+  if(platform_ptr == 0x80306000 && gvr_current_map == MAP_PIRATES_2)
+  {
+      util_inject(UTIL_INJECT_RAW, 0x801748F8, 0x94420050, 0);
+      util_inject(UTIL_INJECT_RAW, 0x80174A08, 0x84430050, 0);
+      util_inject(UTIL_INJECT_RAW, 0x80174A54, 0xA4620050, 0);
+      util_inject(UTIL_INJECT_RAW, 0x801749F8, 0x3C028029, 0);
+      util_inject(UTIL_INJECT_RAW, 0x801749FC, 0x8C4203B0, 0);
+
+      util_inject(UTIL_INJECT_RAW, 0x8015A7E0, 0x24030001, 0);
+      util_inject(UTIL_INJECT_RAW, 0x8015A7E4, 0xA4430050, 0);
+      util_inject(UTIL_INJECT_RAW, 0x8015959C, 0x24030001, 0);
+      util_inject(UTIL_INJECT_RAW, 0x801595A0, 0xA4430050, 0);
+  }
 }
 
 extern bool checkpointItemPauseSelectDisplaced(u32 checkpointl_ptr);
 extern bool checkpointItemPauseDisplaced(u32 checkpointl_ptr);
 extern u32 TipTextDisplaced(u32 orig_txt_ptr);
+extern void PlatformSwitchDisplaced(u32 platformptr);
 
 
 u32 inject_hooks() {
@@ -1337,7 +1418,12 @@ u32 inject_hooks() {
   if(ap_memory.pc.settings.garib_logic != 0) // don't increase Garib Counter
   {
     util_inject(UTIL_INJECT_RAW, 0x8018BEB8, (u32) 0, 0);
+    util_inject(UTIL_INJECT_FUNCTION, 0x8018BE88, (u32)garib_sounds, 1);
   }
+  util_inject(UTIL_INJECT_RAW, 0x8018DF84, (u32) 0, 0); // Don't increase Life when getting life
+  util_inject(UTIL_INJECT_RAW, 0x8018E0D8, (u32) 0, 0); // Don't increase Life getting all garibs?
+  util_inject(UTIL_INJECT_RAW, 0x8018E340, (u32) 0, 0); // Don't increase Life getting all garibs
+
   //hijack tiphats
   util_inject(UTIL_INJECT_FUNCTION, 0x801838A8, (u32)init_tiphats, 0);
   //talk to tuiphat
@@ -1381,8 +1467,9 @@ u32 inject_hooks() {
 
       util_inject(UTIL_INJECT_FUNCTION, 0x8015A7E0, (u32)ball_switch, 1); //Ball Switch alt
       util_inject(UTIL_INJECT_FUNCTION, 0x8015959C, (u32)ball_switch_alt, 1); //Ball Switch alt
+
+      util_inject(UTIL_INJECT_FUNCTION, 0x80172524, (u32)PlatformSwitchDisplaced, 1); //Pirate 2 Platform fix
     }
-    // util_inject(UTIL_INJECT_FUNCTION, 0x8018E848, (u32)trigger_block, 0);
     util_inject(UTIL_INJECT_FUNCTION, 0x8018F408, (u32)puzzle_spawn_garibs, 1);
     util_inject(UTIL_INJECT_FUNCTION, 0x80190B54, (u32)puzzle_switch_condition, 1);
     util_inject(UTIL_INJECT_RAW, 0x80190B64, (u32)0, 0);
@@ -1394,15 +1481,13 @@ u32 inject_hooks() {
   //Hijack Potions
   util_inject(UTIL_INJECT_FUNCTION, 0x8018C490, (u32)ball_powerup, 1); 
   util_inject(UTIL_INJECT_FUNCTION, 0x8018EEA0, (u32)spawned_potion, 0);
-  //util_inject(UTIL_INJECT_FUNCTION, 0x8018C4A0, (u32)glover_powerup, 0); glover animation
 
   //deathlink
   util_inject(UTIL_INJECT_FUNCTION, 0x801721A8, (u32)deathlink_trigger, 1);
-  util_inject(UTIL_INJECT_FUNCTION, 0x80174128, (u32)deathlink_trigger, 1); //Test
+  util_inject(UTIL_INJECT_FUNCTION, 0x80174128, (u32)deathlink_trigger, 1);
   util_inject(UTIL_INJECT_FUNCTION, 0x801B0D94, (u32)deathlink_trigger, 1);
 
   //No more Lightning flashes
-  //util_inject(UTIL_INJECT_RAW, 0x801BB234, (u32)0, 0); 
   util_inject(UTIL_INJECT_RAW, 0x801BB2E0, (u32)0, 0); 
 
   util_inject(UTIL_INJECT_FUNCTION, 0x801A6398, (u32)chicken_check, 0);
@@ -1419,11 +1504,14 @@ u32 inject_hooks() {
     util_inject(UTIL_INJECT_FUNCTION, 0x80126A38, (u32)checkpointItemPauseDisplaced, 1); //Pausing
     util_inject(UTIL_INJECT_RAW, 0x80126A40, (u32)0, 0);
     util_inject(UTIL_INJECT_RAW, 0x80126A44, (u32)0, 0);
+
+    util_inject(UTIL_INJECT_RAW, 0x8017E43C, (u32)0, 0); //don't autochange checkpoint when collecting checkpoint location
   }
 
   if(ap_memory.pc.settings.tip_hints)
   {
     util_inject(UTIL_INJECT_FUNCTION, 0x801B8698, (u32)TipTextDisplaced, 1);
+    util_inject(UTIL_INJECT_RAW, 0x801B8644, (u32)0x24020000, 0);
   }
 
   return 0;
