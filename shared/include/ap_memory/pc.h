@@ -1,14 +1,13 @@
 #ifndef PC_H
 #define PC_H
     #include "util.h"
-    #include "glover/items.h"
     #include "items.h"
     #include "glover/worlds.h"
 
     typedef struct {
         u8 hub_entrance; //1 = atlantis, 7 = training
         u8 door; //1 = door 1, 5 = bonus
-        u16 warp_id;
+        u8 warp_offset_id;
         struct {
             u32 ptr;
             u16 id;
@@ -32,7 +31,14 @@
             u32 ptr;
             u16 id;
             u8 collected;
-        } tip_checks[5];
+            u8 active;
+            struct {
+                struct{
+                    char text[21];
+                } lines[6];
+                u8 last_line;
+            } tip_text;
+        } tip_checks[15];
         struct {
             u32 ptr;
             u16 id;
@@ -66,20 +72,24 @@
         struct {
             u8 garib_logic;
             u8 randomize_checkpoints;
+            u8 checkpoint_items;
             u8 randomize_switches;
             u8 deathlink;
             u8 taglink;
+            u8 tip_hints;
+            u8 inverse;
+            u8 random_sounds;
+            u8 portals;
+            u16 trap_timer;
         } settings;
         u8 items[AP_MAX_ITEM];
         struct {
             char text[31];
-        } text_queue[50];
+        } text_queue[100];
         u8 send_text;
         u8 text_ready;
         u8 need_respawn;
         u8 respawned;
-        u8 pc_deathlink;
-        u8 pc_taglink;
         u8 n64_text;
         u8 n64_deathlink;
         u8 n64_taglink;
@@ -88,6 +98,21 @@
         u8 version_minor;
         u8 version_patch;
         worlds_t worlds[AP_MAX_WORLDS];
+        struct {
+            u32 ptr;
+            u16 id;
+            u8 collected;
+            u8 active;
+            struct {
+                struct{
+                    char text[21];
+                } lines[6];
+                u8 last_line;
+            } tip_text;
+        } wayroom_tip_checks[6];
+        u8 chicken;
+        u32 last_tip_ptr;
+        bool forcechange;
     } ap_memory_pc_t;
 
 #endif

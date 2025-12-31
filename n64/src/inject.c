@@ -6,6 +6,7 @@
 #include "worlds.h"
 #include "tools.h"
 #include "sfx.h"
+#include "portal_doors.h"
 
 bool init = false;
 bool gotdjump = false;
@@ -14,14 +15,9 @@ bool changed_ball = false;
 bool respawned = false;
 bool credits = false;
 bool inversed = false;
-
 void watch_controls()
 {
   if(gvr_controls.DPAD_L && !dpad_pressed) {
-    if(ap_memory.pc.items[AP_DEBUG])
-    {
-      ap_memory.pc.items[AP_FROG_TRAP]++;
-    }
     dpad_pressed = true;
   }
   else if(gvr_controls.DPAD_R && !dpad_pressed) {
@@ -32,7 +28,6 @@ void watch_controls()
     dpad_pressed = true;
   }
   else if(gvr_controls.DPAD_U && !dpad_pressed) {
-    //ap_memory.pc.items[AP_DEBUG] = 1;
     dpad_pressed = true;
   }
   else if(gvr_controls.DPAD_D && !dpad_pressed) {
@@ -78,12 +73,26 @@ void pre_loop()
     gvr_double_jump_clear2 = 0;
     InitLocationIds();
     ap_memory.pc.text_ready = 1;
+    //ap_memory.pc.settings.portals = 1;
+    //ap_memory.pc.settings.garib_logic = 1;
+    //ap_memory.pc.settings.random_sounds= 1;
+    //ap_memory.pc.settings.randomize_switches = true;
+    //ap_memory.pc.settings.randomize_checkpoints = true;
+    //ap_memory.pc.settings.checkpoint_items = true;
+    
     init = true;
   }
+
   if(gvr_fade_var == 0 && gvr_loaded_timer > 0 && gvr_bosscutscene == 0)
   {
-    CheckSensitiveReceivedAPItems();
-    TrapTimer();
+    if(gvr_current_map != 0xFF && gvr_current_map != 0x2B && gvr_current_map != 0x2C)
+    {
+      if (gvr_current_map != 0x0A && gvr_prev_map != 0xFF)
+      {
+        CheckSensitiveReceivedAPItems();
+        TrapTimer();
+      }
+    }
   }
   CheckReceivedAPItems();
   if(!ap_memory.pc.items[AP_DOUBLE_JUMP])
@@ -310,7 +319,10 @@ void pre_loop()
   }
   monitorObjectIds();//TMP
 
-  UnlockStarWorld();
+  if(ap_memory.pc.settings.portals == 0)
+  {
+    UnlockStarWorld();
+  }
 }
 
 bool can_input(u32 input)
@@ -863,6 +875,7 @@ void collected_object(u32 ram_ptr_plus_18, u32 unknown_ptr, u32 unknown_ptr2, u3
   CollectedLifeSpaceBONUS(real_item_ptr);
 
   CollectedObjectIds(real_item_ptr); //TMP
+
   return gvr_fn_collected_object(ram_ptr_plus_18, unknown_ptr, unknown_ptr2, zero);
 }
 
@@ -1377,6 +1390,12 @@ extern bool checkpointItemPauseSelectDisplaced(u32 checkpointl_ptr);
 extern bool checkpointItemPauseDisplaced(u32 checkpointl_ptr);
 extern u32 TipTextDisplaced(u32 orig_txt_ptr);
 extern void PlatformSwitchDisplaced(u32 platformptr);
+extern void PortalBarrierDisplaced(u32 gate_ptr);
+
+bool PortalBarrier(u32 gate_ptr, u8 gate) //false = open
+{
+  return OpenDoor(gate);
+}
 
 
 u32 inject_hooks() {
@@ -1514,5 +1533,13 @@ u32 inject_hooks() {
     util_inject(UTIL_INJECT_RAW, 0x801B8644, (u32)0x24020000, 0);
   }
 
+  //Star Bonus Fix
+  util_inject(UTIL_INJECT_RAW, 0x80128DA8, (u32)0x10600011, 0);
+  util_inject(UTIL_INJECT_RAW, 0x80128DAC, (u32)0x24060000, 0);
+
+  if(ap_memory.pc.settings.portals)
+  {
+    util_inject(UTIL_INJECT_FUNCTION, 0x801202D0, (u32)PortalBarrierDisplaced, 1);
+  }
   return 0;
 }

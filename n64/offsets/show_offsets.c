@@ -67,8 +67,8 @@ int main() {
   printf("        potion_collected = 0x%X,\n",                calc(mem.pc.worlds->potion_checks, mem.pc.worlds->potion_checks->collected));
   printf("      potion_size = 0x%X,\n",                       calc(mem.pc.worlds->potion_checks[0], mem.pc.worlds->potion_checks[1]));
 
-
   printf("      goal = 0x%X,\n",                              calc(mem.pc.worlds, mem.pc.worlds->goal));
+  printf("      starred = 0x%X,\n",                           calc(mem.pc.worlds, mem.pc.worlds->star));
   printf("    ap_world_offset = 0x%X,\n",                     calc(mem.pc.worlds[0], mem.pc.worlds[1]));
 
   printf("    ap_hub_order = 0x%X,\n",                        calc(mem, mem.pc.hub_order));
@@ -88,7 +88,8 @@ int main() {
   printf("    wayroom_size = 0x%X,\n",                        calc(mem.pc.wayroom_tip_checks[0], mem.pc.wayroom_tip_checks[1]));
   
   printf("    chicken_collected = 0x%X,\n",                   calc(mem.pc, mem.pc.chicken));
-
+  printf("    wayroom_completed_stars = 0x%X,\n",             calc(mem.pc, mem.pc.secret_unlock));
+  printf("    wayroom_completed_size = 0x%X,\n",             calc(mem.pc.secret_unlock[0], mem.pc.secret_unlock[1]));
   printf("    settings = 0x%X,\n",                            calc(mem, mem.pc.settings));
   printf("      garib_logic = 0x%X,\n",                       calc(mem.pc.settings, mem.pc.settings.garib_logic));
   printf("      randomize_checkpoints = 0x%X,\n",             calc(mem.pc.settings, mem.pc.settings.randomize_checkpoints));
@@ -99,6 +100,10 @@ int main() {
   printf("      tip_hints = 0x%X,\n",                         calc(mem.pc.settings, mem.pc.settings.tip_hints));
   printf("      inverse = 0x%X,\n",                           calc(mem.pc.settings, mem.pc.settings.inverse));
   printf("      random_garib_sounds = 0x%X,\n",               calc(mem.pc.settings, mem.pc.settings.random_sounds));
+  printf("      portalsanity = 0x%X,\n",                      calc(mem.pc.settings, mem.pc.settings.portals));
+  printf("      trap_timer = 0x%X,\n",                      calc(mem.pc.settings, mem.pc.settings.trap_timer));
+
+
   printf("    hub_map = 0x%X,\n",                             calc(mem, mem.pc.hub_map));
   printf("    world_map = 0x%X,\n",                           calc(mem, mem.pc.world_map));
   printf("    n64_deathlink = 0x%X,\n",                       calc(mem, mem.pc.n64_deathlink));

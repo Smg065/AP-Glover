@@ -83,3 +83,44 @@ LD V0, 0x0078 (SP)
 JAL 0x801748D0
 NOP
 J 0x8017252C
+
+.align 0x08
+.function MoveBarrierDisplaced
+    SWC1 F20, 0x00B8 (V0)
+    LD V0, 0x0038 (SP)
+    LD A0, 0x0010 (SP)
+    LD A1, 0x0018 (SP)
+    LD A2, 0x0020 (SP)
+    LD A3, 0x0028 (SP)
+    LD V1, 0x0030 (SP)
+    LD V0, 0x0038 (SP)
+    LD S0, 0x0040 (SP)
+    ADDIU S0, S0, 0x0001
+    J 0x801202D8
+    NOP
+.endfunction
+
+.align 0x08
+PortalBarrierDisplaced:
+SD A0, 0x0010 (SP)
+SD A1, 0x0018 (SP)
+SD A2, 0x0020 (SP)
+SD A3, 0x0028 (SP)
+SD V1, 0x0030 (SP)
+SD V0, 0x0038 (SP)
+SD S0, 0x0040 (SP)
+ADDIU A1, A0, 0x0000
+JAL PortalBarrier
+ADDIU A0, V0, 0x0000
+beq V0, R0, MoveBarrierDisplaced
+LD V0, 0x0038 (SP)
+LD A0, 0x0010 (SP)
+LD A1, 0x0018 (SP)
+LD A2, 0x0020 (SP)
+LD A3, 0x0028 (SP)
+LD V1, 0x0030 (SP)
+LD V0, 0x0038 (SP)
+LD S0, 0x0040 (SP)
+ADDIU S0, S0, 0x0001
+J 0x801202D8
+NOP

@@ -4,9 +4,8 @@ u8 single_garib_counter = 0;
 u8 life_counter = 0;
 u32 dialog_addr = 0;
 u8 dialog_map = 0;
-u8 timer = 0;
+u8 dialog_timer = 0;
 u16 trap_timer = 0;
-u16 trap_counter = 0;
 bool trap_active = false;
 bool is_cheat = false;
 
@@ -149,7 +148,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.garib_totals[AP_ATLANTIS_BONUS])
             {
                 ap_memory.pc.garib_totals[AP_ATLANTIS_BONUS] = ap_memory.pc.items[item];
-                char *text = "YOU RECEIVED ATLS-BONUS GARIBS";
+                char *text = "YOU GOT ATLS-BONUS GARIBS";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -159,7 +158,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.garib_totals[AP_CARNIVAL_L1])
             {
                 ap_memory.pc.garib_totals[AP_CARNIVAL_L1] = ap_memory.pc.items[item];
-                char *text = "YOU RECEIVED CARNIVAL-1 GARIBS";
+                char *text = "YOU GOT CARNIVAL-1 GARIBS";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -168,7 +167,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.garib_totals[AP_CARNIVAL_L2])
             {
                 ap_memory.pc.garib_totals[AP_CARNIVAL_L2] = ap_memory.pc.items[item];
-                char *text = "YOU RECEIVED CARNIVAL-2 GARIBS";
+                char *text = "YOU GOT CARNIVAL-2 GARIBS";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -177,7 +176,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.garib_totals[AP_CARNIVAL_L3])
             {
                 ap_memory.pc.garib_totals[AP_CARNIVAL_L3] = ap_memory.pc.items[item];
-                char *text = "YOU RECEIVED CARNIVAL-3 GARIBS";
+                char *text = "YOU GOT CARNIVAL-3 GARIBS";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -186,7 +185,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.garib_totals[AP_CARNIVAL_BONUS])
             {
                 ap_memory.pc.garib_totals[AP_CARNIVAL_BONUS] = ap_memory.pc.items[item];
-                char *text = "YOU RECEIVED CARNIVAL-BONUS GARIBS";
+                char *text = "YOU GOT CARNIVAL-BONUS GARIBS";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -223,7 +222,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.garib_totals[AP_PIRATES_BONUS])
             {
                 ap_memory.pc.garib_totals[AP_PIRATES_BONUS] = ap_memory.pc.items[item];
-                char *text = "YOU RECEIVED PIRATES-BONUS GARIBS";
+                char *text = "YOU GOT PIRATES-BONUS GARIBS";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -260,7 +259,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.garib_totals[AP_PREHISTORIC_BONUS])
             {
                 ap_memory.pc.garib_totals[AP_PREHISTORIC_BONUS] = ap_memory.pc.items[item];
-                char *text = "YOU RECEIVED PREHIST-B GARIBS";
+                char *text = "YOU GOT PREHIST-BONUS GARIBS";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -270,7 +269,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.garib_totals[AP_FORTRESS_L1])
             {
                 ap_memory.pc.garib_totals[AP_FORTRESS_L1] = ap_memory.pc.items[item];
-                char *text = "YOU RECEIVED FORTRESS-1 GARIBS";
+                char *text = "YOU RECEIVED FEAR-1 GARIBS";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -279,7 +278,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.garib_totals[AP_FORTRESS_L2])
             {
                 ap_memory.pc.garib_totals[AP_FORTRESS_L2] = ap_memory.pc.items[item];
-                char *text = "YOU RECEIVED FORTRESS-2 GARIBS";
+                char *text = "YOU RECEIVED FEAR-2 GARIBS";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -288,7 +287,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.garib_totals[AP_FORTRESS_L3])
             {
                 ap_memory.pc.garib_totals[AP_FORTRESS_L3] = ap_memory.pc.items[item];
-                char *text = "YOU RECEIVED FORTRESS-3 GARIBS";
+                char *text = "YOU RECEIVED FEAR-3 GARIBS";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -297,7 +296,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.garib_totals[AP_FORTRESS_BONUS])
             {
                 ap_memory.pc.garib_totals[AP_FORTRESS_BONUS] = ap_memory.pc.items[item];
-                char *text = "YOU RECEIVED FORTRESS-BONUS GARIBS";
+                char *text = "YOU GOT FEAR-BONUS GARIBS";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -334,7 +333,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.garib_totals[AP_SPACE_BONUS])
             {
                 ap_memory.pc.garib_totals[AP_SPACE_BONUS] = ap_memory.pc.items[item];
-                char *text = "YOU RECEIVED SPACE-BONUS GARIBS";
+                char *text = "YOU GOT SPACE-BONUS GARIBS";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -570,7 +569,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
             {
                 ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                char *text = "YOU GOT ATLANTIS-2 RAISE WATER";
+                char *text = "YOU GOT ATLS-2 RAISE WATER";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -579,7 +578,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
             {
                 ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                char *text = "YOU GOT ATLANTIS-2 DRAIN WATER";
+                char *text = "YOU GOT ATLS-2 DRAIN WATER";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -597,7 +596,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
             {
                 ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                char *text = "YOU GOT ATLANTIS-3 WATER WHEEL";
+                char *text = "YOU GOT ATLS-3 WATER WHEEL";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -663,15 +662,15 @@ void CheckReceivedAPItems()
                 char *text;
                 if(ap_memory.pc.items[item] == 1)
                 {
-                    text = "YOU GOT CARN-1 ROCKET-RAMP 1/3";
+                    text = "GOT CARN-1 ROCKET-RAMP 1/3";
                 }
                 else if(ap_memory.pc.items[item] == 2)
                 {
-                    text = "YOU GOT CARN-1 ROCKET-RAMP 2/3";
+                    text = "GOT CARN-1 ROCKET-RAMP 2/3";
                 }
                 else if(ap_memory.pc.items[item] == 3)
                 {
-                    text = "YOU GOT CARN-1 ROCKET-RAMP 3/3";
+                    text = "GOT CARN-1 ROCKET-RAMP 3/3";
                 }
                 else
                 {
@@ -685,7 +684,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
             {
                 ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                char *text = "YOU GOT CARNIVAL-2 GARIB SPAWN";
+                char *text = "YOU GOT CARN-2 GARIB SPAWN";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -903,19 +902,19 @@ void CheckReceivedAPItems()
                 char *text;
                 if(ap_memory.pc.items[item] == 1)
                 {
-                    text = "YOU GOT PREHIST-3 MONOLITH 1/4";
+                    text = "GOT PREHIST-3 MONOLITH 1/4";
                 }
                 else if(ap_memory.pc.items[item] == 2)
                 {
-                    text = "YOU GOT PREHIST-3 MONOLITH 2/4";
+                    text = "GOT PREHIST-3 MONOLITH 2/4";
                 }
                 else if(ap_memory.pc.items[item] == 3)
                 {
-                    text = "YOU GOT PREHIST-3 MONOLITH 3/4";
+                    text = "GOT PREHIST-3 MONOLITH 3/4";
                 }
                 else if(ap_memory.pc.items[item] == 4)
                 {
-                    text = "YOU GOT PREHIST-3 MONOLITH 4/4";
+                    text = "GOT PREHIST-3 MONOLITH 4/4";
                 }
                 else
                 {
@@ -1157,7 +1156,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
             {
                 ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                char *text = "YOU GOT TRAINING-WORLD SANDPIT";
+                char *text = "GOT TRAINING-WORLD SANDPIT";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -1383,7 +1382,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
             {
                 ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                char *text = "YOU GOT PIRATES-1 CHECKPOINT 1";
+                char *text = "GOT PIRATES-1 CHECKPOINT 1";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -1392,7 +1391,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
             {
                 ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                char *text = "YOU GOT PIRATES-1 CHECKPOINT 2";
+                char *text = "GOT PIRATES-1 CHECKPOINT 2";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -1401,7 +1400,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
             {
                 ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                char *text = "YOU GOT PIRATES-1 CHECKPOINT 3";
+                char *text = "GOT PIRATES-1 CHECKPOINT 3";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -1410,7 +1409,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
             {
                 ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                char *text = "YOU GOT PIRATES-2 CHECKPOINT 1";
+                char *text = "GOT PIRATES-2 CHECKPOINT 1";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -1419,7 +1418,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
             {
                 ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                char *text = "YOU GOT PIRATES-2 CHECKPOINT 2";
+                char *text = "GOT PIRATES-2 CHECKPOINT 2";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -1428,7 +1427,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
             {
                 ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                char *text = "YOU GOT PIRATES-2 CHECKPOINT 3";
+                char *text = "GOT PIRATES-2 CHECKPOINT 3";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -1437,7 +1436,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
             {
                 ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                char *text = "YOU GOT PIRATES-3 CHECKPOINT 1";
+                char *text = "GOT PIRATES-3 CHECKPOINT 1";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -1446,7 +1445,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
             {
                 ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                char *text = "YOU GOT PIRATES-3 CHECKPOINT 2";
+                char *text = "GOT PIRATES-3 CHECKPOINT 2";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -1455,7 +1454,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
             {
                 ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                char *text = "YOU GOT PIRATES-3 CHECKPOINT 3";
+                char *text = "GOT PIRATES-3 CHECKPOINT 3";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -1464,7 +1463,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
             {
                 ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                char *text = "YOU GOT PIRATES-3 CHECKPOINT 4";
+                char *text = "GOT PIRATES-3 CHECKPOINT 4";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -1473,7 +1472,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
             {
                 ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                char *text = "YOU GOT PREHIST-1 CHECKPOINT 1";
+                char *text = "GOT PREHIST-1 CHECKPOINT 1";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -1482,7 +1481,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
             {
                 ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                char *text = "YOU GOT PREHIST-1 CHECKPOINT 2";
+                char *text = "GOT PREHIST-1 CHECKPOINT 2";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -1491,7 +1490,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
             {
                 ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                char *text = "YOU GOT PREHIST-1 CHECKPOINT 3";
+                char *text = "GOT PREHIST-1 CHECKPOINT 3";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -1500,7 +1499,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
             {
                 ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                char *text = "YOU GOT PREHIST-2 CHECKPOINT 1";
+                char *text = "GOT PREHIST-2 CHECKPOINT 1";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -1509,7 +1508,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
             {
                 ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                char *text = "YOU GOT PREHIST-2 CHECKPOINT 2";
+                char *text = "GOT PREHIST-2 CHECKPOINT 2";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -1518,7 +1517,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
             {
                 ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                char *text = "YOU GOT PREHIST-2 CHECKPOINT 3";
+                char *text = "GOT PREHIST-2 CHECKPOINT 3";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -1526,7 +1525,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
             {
                 ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                char *text = "YOU GOT PREHIST-2 CHECKPOINT 4";
+                char *text = "GOT PREHIST-2 CHECKPOINT 4";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -1535,7 +1534,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
             {
                 ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                char *text = "YOU GOT PREHIST-3 CHECKPOINT 1";
+                char *text = "GOT PREHIST-3 CHECKPOINT 1";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -1544,7 +1543,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
             {
                 ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                char *text = "YOU GOT PREHIST-3 CHECKPOINT 2";
+                char *text = "GOT PREHIST-3 CHECKPOINT 2";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -1553,7 +1552,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
             {
                 ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                char *text = "YOU GOT PREHIST-3 CHECKPOINT 3";
+                char *text = "GOT PREHIST-3 CHECKPOINT 3";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -1561,7 +1560,7 @@ void CheckReceivedAPItems()
             if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
             {
                 ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                char *text = "YOU GOT PREHIST-3 CHECKPOINT 4";
+                char *text = "GOT PREHIST-3 CHECKPOINT 4";
                 DialogQueue(text);
                 ap_memory.pc.send_text++;
             }
@@ -1929,10 +1928,17 @@ void CheckSensitiveReceivedAPItems()
                         if(!trap_active)
                         {
                             ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                            trap_timer = 500;
                             trap_active = true;
-                            trap_counter = 0;
-                            return gvr_fn_change_ball(TRANSFORM_HERCULES_POTION, 0xFF, 0x01, 0x18);
+                            if (ap_memory.pc.settings.trap_timer != 0)
+                            {
+                                trap_timer = ap_memory.pc.settings.trap_timer * 2;
+                                return gvr_fn_change_ball(TRANSFORM_HERCULES_POTION, ap_memory.pc.settings.trap_timer, 0x01, 0x18);
+                            }
+                            else
+                            {
+                                trap_timer = 0xFF * 2;
+                                return gvr_fn_change_ball(TRANSFORM_HERCULES_POTION, 0xFF, 0x01, 0x18);
+                            } 
                         }
                     }
                     break;
@@ -1942,10 +1948,17 @@ void CheckSensitiveReceivedAPItems()
                         if(!trap_active)
                         {
                             ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                            trap_timer = 500;
                             trap_active = true;
-                            trap_counter = 0;
-                            return gvr_fn_change_ball(TRANSFORM_SPEED_POTION, 0xFF, 0x01, 0x18);
+                            if (ap_memory.pc.settings.trap_timer != 0)
+                            {
+                                trap_timer = ap_memory.pc.settings.trap_timer * 2;
+                                return gvr_fn_change_ball(TRANSFORM_SPEED_POTION, ap_memory.pc.settings.trap_timer, 0x01, 0x18);
+                            }
+                            else
+                            {
+                                trap_timer = 0xFF * 2;
+                                return gvr_fn_change_ball(TRANSFORM_SPEED_POTION, 0xFF, 0x01, 0x18);
+                            } 
                         }
                     }
                     break;
@@ -1955,10 +1968,17 @@ void CheckSensitiveReceivedAPItems()
                         if(!trap_active)
                         {
                             ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                            trap_timer = 500;
                             trap_active = true;
-                            trap_counter = 0;
-                            return gvr_fn_change_ball(TRANSFORM_STICKY_POTION, 0xFF, 0x01, 0x18);
+                            if (ap_memory.pc.settings.trap_timer != 0)
+                            {
+                                trap_timer = ap_memory.pc.settings.trap_timer * 2;
+                                return gvr_fn_change_ball(TRANSFORM_STICKY_POTION, ap_memory.pc.settings.trap_timer, 0x01, 0x18);
+                            }
+                            else
+                            {
+                                trap_timer = 0xFF * 2;
+                                return gvr_fn_change_ball(TRANSFORM_STICKY_POTION, 0xFF, 0x01, 0x18);
+                            } 
                         }
                     }
                     break;
@@ -1968,10 +1988,17 @@ void CheckSensitiveReceivedAPItems()
                         if(!trap_active)
                         {
                             ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                            trap_timer = 500;
                             trap_active = true;
-                            trap_counter = 0;
-                            return gvr_fn_change_ball(TRANSFORM_FROG_POTION, 0xFF, 0x01, 0x18);
+                            if (ap_memory.pc.settings.trap_timer != 0)
+                            {
+                                trap_timer = ap_memory.pc.settings.trap_timer * 2;
+                                return gvr_fn_change_ball(TRANSFORM_FROG_POTION, ap_memory.pc.settings.trap_timer, 0x01, 0x18);
+                            }
+                            else
+                            {
+                                trap_timer = 0xFF * 2;
+                                return gvr_fn_change_ball(TRANSFORM_FROG_POTION, 0xFF, 0x01, 0x18);
+                            }
                         }
                     }
                     break;
@@ -1986,10 +2013,17 @@ void CheckSensitiveReceivedAPItems()
                             gvr_current_map != MAP_WAYROOM)
                             {
                                 ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                                trap_timer = 500;
                                 trap_active = true;
-                                trap_counter = 0;
-                                return gvr_fn_change_ball(TRANSFORM_BOOMERANG_POTION, 0xFF, 0x01, 0x18);
+                                if (ap_memory.pc.settings.trap_timer != 0)
+                                {
+                                    trap_timer = ap_memory.pc.settings.trap_timer * 2;
+                                    return gvr_fn_change_ball(TRANSFORM_BOOMERANG_POTION, ap_memory.pc.settings.trap_timer, 0x01, 0x18);
+                                }
+                                else
+                                {
+                                    trap_timer = 0xFF * 2;
+                                    return gvr_fn_change_ball(TRANSFORM_BOOMERANG_POTION, 0xFF, 0x01, 0x18);
+                                }
                             }
                         }
                     }
@@ -2005,10 +2039,17 @@ void CheckSensitiveReceivedAPItems()
                             gvr_current_map != MAP_WAYROOM)
                             {
                                 ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                                trap_timer = 500;
                                 trap_active = true;
-                                trap_counter = 0;
-                                return gvr_fn_change_ball(TRANSFORM_BEACH_BALL, 0xFF, 0x01, 0x18);
+                                if (ap_memory.pc.settings.trap_timer != 0)
+                                {
+                                    trap_timer = ap_memory.pc.settings.trap_timer * 2;
+                                    return gvr_fn_change_ball(TRANSFORM_BEACH_BALL, ap_memory.pc.settings.trap_timer, 0x01, 0x18);
+                                }
+                                else
+                                {
+                                    trap_timer = 0xFF * 2;
+                                    return gvr_fn_change_ball(TRANSFORM_BEACH_BALL, 0xFF, 0x01, 0x18);
+                                }
                             }
                         }
                     }
@@ -2019,9 +2060,17 @@ void CheckSensitiveReceivedAPItems()
                         if(!trap_active)
                         {
                             ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                            trap_timer = 500;
                             trap_active = true;
-                            return gvr_fn_change_ball(TRANSFORM_HELICOPTER_POTION, 0xFF, 0x01, 0x18);
+                            if (ap_memory.pc.settings.trap_timer != 0)
+                            {
+                                trap_timer = ap_memory.pc.settings.trap_timer * 2;
+                                return gvr_fn_change_ball(TRANSFORM_HELICOPTER_POTION, ap_memory.pc.settings.trap_timer, 0x01, 0x18);
+                            }
+                            else
+                            {
+                                trap_timer = 0xFF * 2;
+                                return gvr_fn_change_ball(TRANSFORM_HELICOPTER_POTION, 0xFF, 0x01, 0x18);
+                            }
                         }
                     }
                     break;
@@ -2031,10 +2080,17 @@ void CheckSensitiveReceivedAPItems()
                         if(!trap_active)
                         {
                             ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                            trap_timer = 500;
                             trap_active = true;
-                            trap_counter = 0;
-                            return gvr_fn_change_ball(TRANSFORM_DEATH_POTION, 0xFF, 0x01, 0x18);
+                            if (ap_memory.pc.settings.trap_timer != 0)
+                            {
+                                trap_timer = ap_memory.pc.settings.trap_timer * 2;
+                                return gvr_fn_change_ball(TRANSFORM_DEATH_POTION, ap_memory.pc.settings.trap_timer, 0x01, 0x18);
+                            }
+                            else
+                            {
+                                trap_timer = 0xFF * 2;
+                                return gvr_fn_change_ball(TRANSFORM_DEATH_POTION, 0xFF, 0x01, 0x18);
+                            }
                         }
                     }
                     break;
@@ -2045,10 +2101,16 @@ void CheckSensitiveReceivedAPItems()
                         {
                             ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
                             gvr_fn_glover_cheat(0x14, 1);
-                            trap_timer = 500;
                             trap_active = true;
                             is_cheat = true;
-                            trap_counter = 0;
+                            if (ap_memory.pc.settings.trap_timer != 0)
+                            {
+                                trap_timer = ap_memory.pc.settings.trap_timer * 2;
+                            }
+                            else
+                            {
+                                trap_timer = 0xFF * 2;
+                            }
                         }
                     }
                     break;
@@ -2058,9 +2120,277 @@ void CheckSensitiveReceivedAPItems()
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
                         gvr_fn_glover_cheat(0x0C, 1);
                         trap_active = true;
-                        trap_timer = 500;
-                        trap_counter = 0;
                         is_cheat = true;
+                        if (ap_memory.pc.settings.trap_timer != 0)
+                        {
+                            trap_timer = ap_memory.pc.settings.trap_timer * 2;
+                        }
+                        else
+                        {
+                            trap_timer = 0xFF * 2;
+                        }
+                    }
+                    break;
+                case AP_CAMERA_90_TRAP:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_fn_glover_cheat(0x0C, 1);
+                        gvr_fn_glover_cheat(0x0C, 1);
+                        trap_active = true;
+                        is_cheat = true;
+                        if (ap_memory.pc.settings.trap_timer != 0)
+                        {
+                            trap_timer = ap_memory.pc.settings.trap_timer * 2;
+                        }
+                        else
+                        {
+                            trap_timer = 0xFF * 2;
+                        }
+                    }
+                    break;
+                case AP_CAMERA_135_TRAP:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_fn_glover_cheat(0x0C, 1);
+                        gvr_fn_glover_cheat(0x0C, 1);
+                        gvr_fn_glover_cheat(0x0C, 1);
+                        trap_active = true;
+                        is_cheat = true;
+                        if (ap_memory.pc.settings.trap_timer != 0)
+                        {
+                            trap_timer = ap_memory.pc.settings.trap_timer * 2;
+                        }
+                        else
+                        {
+                            trap_timer = 0xFF * 2;
+                        }
+                    }
+                    break;
+                case AP_CAMERA_180_TRAP:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_fn_glover_cheat(0x0C, 1);
+                        gvr_fn_glover_cheat(0x0C, 1);
+                        gvr_fn_glover_cheat(0x0C, 1);
+                        gvr_fn_glover_cheat(0x0C, 1);
+                        trap_active = true;
+                        is_cheat = true;
+                        if (ap_memory.pc.settings.trap_timer != 0)
+                        {
+                            trap_timer = ap_memory.pc.settings.trap_timer * 2;
+                        }
+                        else
+                        {
+                            trap_timer = 0xFF * 2;
+                        }
+                    }
+                    break;
+                case AP_CAMERA_225_TRAP:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_fn_glover_cheat(0x0C, 1);
+                        gvr_fn_glover_cheat(0x0C, 1);
+                        gvr_fn_glover_cheat(0x0C, 1);
+                        gvr_fn_glover_cheat(0x0C, 1);
+                        gvr_fn_glover_cheat(0x0C, 1);
+                        trap_active = true;
+                        is_cheat = true;
+                        if (ap_memory.pc.settings.trap_timer != 0)
+                        {
+                            trap_timer = ap_memory.pc.settings.trap_timer * 2;
+                        }
+                        else
+                        {
+                            trap_timer = 0xFF * 2;
+                        }
+                    }
+                    break;
+                case AP_CAMERA_270_TRAP:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_fn_glover_cheat(0x0C, 1);
+                        gvr_fn_glover_cheat(0x0C, 1);
+                        gvr_fn_glover_cheat(0x0C, 1);
+                        gvr_fn_glover_cheat(0x0C, 1);
+                        gvr_fn_glover_cheat(0x0C, 1);
+                        gvr_fn_glover_cheat(0x0C, 1);
+                        trap_active = true;
+                        is_cheat = true;
+                        if (ap_memory.pc.settings.trap_timer != 0)
+                        {
+                            trap_timer = ap_memory.pc.settings.trap_timer * 2;
+                        }
+                        else
+                        {
+                            trap_timer = 0xFF * 2;
+                        }
+                    }
+                    break;
+                case AP_CAMERA_315_TRAP:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_fn_glover_cheat(0x0C, 1);
+                        gvr_fn_glover_cheat(0x0C, 1);
+                        gvr_fn_glover_cheat(0x0C, 1);
+                        gvr_fn_glover_cheat(0x0C, 1);
+                        gvr_fn_glover_cheat(0x0C, 1);
+                        gvr_fn_glover_cheat(0x0C, 1);
+                        gvr_fn_glover_cheat(0x0C, 1);
+                        trap_active = true;
+                        is_cheat = true;
+                        if (ap_memory.pc.settings.trap_timer != 0)
+                        {
+                            trap_timer = ap_memory.pc.settings.trap_timer * 2;
+                        }
+                        else
+                        {
+                            trap_timer = 0xFF * 2;
+                        }
+                    }
+                    break;
+                case AP_MAD_GARIBS:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_fn_glover_cheat(0x0D, 1);
+                    }
+                    break;
+                case AP_FISH_EYE_TRAP:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        if(!trap_active)
+                        {
+                            ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                            gvr_fn_glover_cheat(0x0A, 1);
+                            trap_active = true;
+                            is_cheat = true;
+                            if (ap_memory.pc.settings.trap_timer != 0)
+                            {
+                                trap_timer = ap_memory.pc.settings.trap_timer * 2;
+                            }
+                            else
+                            {
+                                trap_timer = 0xFF * 2;
+                            }
+                        }
+                    }
+                    break;
+                case AP_ENEMY_BALL_TRAP:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        if(!trap_active)
+                        {
+                            ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                            gvr_fn_glover_cheat(0x07, 1);
+                            trap_active = true;
+                            is_cheat = true;
+                            if (ap_memory.pc.settings.trap_timer != 0)
+                            {
+                                trap_timer = ap_memory.pc.settings.trap_timer * 2;
+                            }
+                            else
+                            {
+                                trap_timer = 0xFF * 2;
+                            }
+                        }
+                    }
+                    break;
+                case AP_CONTROL_BALL_TRAP:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        if(!trap_active)
+                        {
+                            if(gvr_current_map != MAP_HUB1 && gvr_current_map != MAP_HUB2 && gvr_current_map != MAP_HUB3 &&
+                            gvr_current_map != MAP_HUB4 && gvr_current_map != MAP_HUB5 && gvr_current_map != MAP_HUB6 &&
+                            gvr_current_map != MAP_HUB7 && gvr_current_map != MAP_HUB8 && gvr_current_map != MAP_CASTLE_CAVE &&
+                            gvr_current_map != MAP_WAYROOM)
+                            {
+                                ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                                gvr_fn_glover_cheat(0x05, 1);
+                                trap_active = true;
+                                is_cheat = true;
+                                if (ap_memory.pc.settings.trap_timer != 0)
+                                {
+                                    trap_timer = ap_memory.pc.settings.trap_timer * 2;
+                                }
+                                else
+                                {
+                                    trap_timer = 0xFF * 2;
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case AP_INVIS_BALL_TRAP:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        if(!trap_active)
+                        {
+                            if(gvr_current_map != MAP_HUB1 && gvr_current_map != MAP_HUB2 && gvr_current_map != MAP_HUB3 &&
+                            gvr_current_map != MAP_HUB4 && gvr_current_map != MAP_HUB5 && gvr_current_map != MAP_HUB6 &&
+                            gvr_current_map != MAP_HUB7 && gvr_current_map != MAP_HUB8 && gvr_current_map != MAP_CASTLE_CAVE &&
+                            gvr_current_map != MAP_WAYROOM)
+                            {
+                                ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                                trap_active = true;
+                                if (ap_memory.pc.settings.trap_timer != 0)
+                                {
+                                    trap_timer = ap_memory.pc.settings.trap_timer * 2;
+                                    return gvr_fn_change_ball(TRANSFORM_INVIS_POTION, ap_memory.pc.settings.trap_timer, 0x08, 0x013);
+                                }
+                                else
+                                {
+                                    trap_timer = 0xFF * 2;
+                                    return gvr_fn_change_ball(TRANSFORM_INVIS_POTION, 0xFF, 0x08, 0x013);
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case AP_BIG_BALL:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        if(!trap_active)
+                        {
+                            ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                            gvr_fn_glover_cheat(0x09, 1);
+                            trap_active = true;
+                            is_cheat = true;
+                            if (ap_memory.pc.settings.trap_timer != 0)
+                            {
+                                trap_timer = ap_memory.pc.settings.trap_timer * 2;
+                            }
+                            else
+                            {
+                                trap_timer = 0xFF * 2;
+                            }
+                        }
+                    }
+                    break;
+                case AP_LOW_GRAV:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        if(!trap_active)
+                        {
+                            ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                            gvr_fn_glover_cheat(0x08, 1);
+                            trap_active = true;
+                            is_cheat = true;
+                            if (ap_memory.pc.settings.trap_timer != 0)
+                            {
+                                trap_timer = ap_memory.pc.settings.trap_timer * 2;
+                            }
+                            else
+                            {
+                                trap_timer = 0xFF * 2;
+                            }
+                        }
                     }
                     break;
                 case AP_CURSE_BALL:
@@ -2071,8 +2401,14 @@ void CheckSensitiveReceivedAPItems()
                             ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
                             gvr_fn_curse_ball(0x1F4, 0x80, 0x01, 0x18);   
                             trap_active = true;
-                            trap_timer = 0x80;
-                            trap_counter = 0;
+                            if (ap_memory.pc.settings.trap_timer != 0)
+                            {
+                                trap_timer = ap_memory.pc.settings.trap_timer * 2;
+                            }
+                            else
+                            {
+                                trap_timer = 0xFF * 2;
+                            }
                         }
                     }
                     break;
@@ -2087,23 +2423,569 @@ void CheckSensitiveReceivedAPItems()
                             DialogQueue(text);
                             ap_memory.pc.send_text++;  
                             trap_active = true;
-                            trap_timer = 0x80;
-                            trap_counter = 0;     
+                            if (ap_memory.pc.settings.trap_timer != 0)
+                            {
+                                trap_timer = ap_memory.pc.settings.trap_timer * 2;
+                            }
+                            else
+                            {
+                                trap_timer = 0xFF * 2;
+                            }
                         }
                     }
                     break;
-                    case AP_OPEN_HUBS:
+                case AP_OPEN_HUBS:
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
                         gvr_fn_glover_cheat(0x18, 1);
                     }
                     break;
-                    case AP_OPEN_WORLDS:
+                case AP_OPEN_WORLDS:
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
                         gvr_fn_glover_cheat(0x19, 1);
+                    }
+                    break;
+                case AP_ATLANTIS_DOOR1_STAR:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_perfect.atl_1 = 1;
+                        char *text = "YOU RECEIVED ATLS-1 HUB STAR";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++;  
+                    }
+                    break;
+                case AP_ATLANTIS_DOOR2_STAR:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_perfect.atl_2 = 1;
+                        char *text = "YOU RECEIVED ATLS-2 HUB STAR";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_ATLANTIS_DOOR3_STAR:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_perfect.atl_3 = 1;
+                        char *text = "YOU RECEIVED ATLS-3 HUB STAR";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_ATLANTIS_DOOR4_STAR:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_gates.atl_boss_defeated = 1;
+                        char *text = "YOU RECEIVED ATLS-4 HUB STAR";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_ATLANTIS_DOOR5_STAR:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_perfect.atl_bonus = 1;
+                        char *text = "YOU RECEIVED ATLS-5 HUB STAR";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_CARNIVAL_DOOR1_STAR:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_perfect.carn_1 = 1;
+                        char *text = "YOU RECEIVED CARN-1 HUB STAR";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++;  
+                    }
+                    break;
+                case AP_CARNIVAL_DOOR2_STAR:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_perfect.carn_2 = 1;
+                        char *text = "YOU RECEIVED CARN-2 HUB STAR";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_CARNIVAL_DOOR3_STAR:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_perfect.carn_3 = 1;
+                        char *text = "YOU RECEIVED CARN-3 HUB STAR";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_CARNIVAL_DOOR4_STAR:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_gates.carn_boss_defeated = 1;
+                        char *text = "YOU RECEIVED CARN-4 HUB STAR";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_CARNIVAL_DOOR5_STAR:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_perfect.carn_bonus = 1;
+                        char *text = "YOU RECEIVED CARN-5 HUB STAR";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_PIRATES_DOOR1_STAR:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_perfect.pir_1 = 1;
+                        char *text = "YOU RECEIVED PIRATES-1 HUB STAR";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++;  
+                    }
+                    break;
+                case AP_PIRATES_DOOR2_STAR:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_perfect.pir_2 = 1;
+                        char *text = "YOU RECEIVED PIRATES-2 HUB STAR";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_PIRATES_DOOR3_STAR:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_perfect.pir_3 = 1;
+                        char *text = "YOU RECEIVED PIRATES-3 HUB STAR";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_PIRATES_DOOR4_STAR:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_gates.pir_boss_defeated = 1;
+                        char *text = "YOU GOT PIRATES-4 HUB STAR";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_PIRATES_DOOR5_STAR:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_perfect.pir_bonus = 1;
+                        char *text = "YOU GOT PIRATES-5 HUB STAR";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_PREHISTORIC_DOOR1_STAR:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_perfect.pre_1 = 1;
+                        char *text = "YOU RECEIVED PREHIST-1 HUB STAR";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++;  
+                    }
+                    break;
+                case AP_PREHISTORIC_DOOR2_STAR:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_perfect.pre_2 = 1;
+                        char *text = "YOU RECEIVED PREHIST-2 HUB STAR";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_PREHISTORIC_DOOR3_STAR:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_perfect.pre_3 = 1;
+                        char *text = "YOU RECEIVED PREHIST-3 HUB STAR";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_PREHISTORIC_DOOR4_STAR:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_gates.pre_boss_defeated = 1;
+                        char *text = "YOU GOT PREHIST-4 HUB STAR";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_PREHISTORIC_DOOR5_STAR:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_perfect.pre_bonus = 1;
+                        char *text = "YOU GOT PREHIST-5 HUB STAR";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_FORTRESS_DOOR1_STAR:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_perfect.fof_1 = 1;
+                        char *text = "YOU RECEIVED FEAR-1 HUB STAR";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++;  
+                    }
+                    break;
+                case AP_FORTRESS_DOOR2_STAR:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_perfect.fof_2 = 1;
+                        char *text = "YOU RECEIVED FEAR-2 HUB STAR";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_FORTRESS_DOOR3_STAR:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_perfect.fof_3 = 1;
+                        char *text = "YOU RECEIVED FEAR-3 HUB STAR";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_FORTRESS_DOOR4_STAR:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_gates.fort_boss_defeated = 1;
+                        char *text = "YOU RECEIVED FEAR-4 HUB STAR";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_FORTRESS_DOOR5_STAR:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_perfect.fof_bonus = 1;
+                        char *text = "YOU RECEIVED FEAR-5 HUB STAR";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_SPACE_DOOR1_STAR:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_perfect.spc_1 = 1;
+                        char *text = "YOU RECEIVED SPACE-1 HUB STAR";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++;  
+                    }
+                    break;
+                case AP_SPACE_DOOR2_STAR:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_perfect.spc_2 = 1;
+                        char *text = "YOU RECEIVED SPACE-2 HUB STAR";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_SPACE_DOOR3_STAR:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_perfect.spc_3 = 1;
+                        char *text = "YOU RECEIVED SPACE-3 HUB STAR";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_SPACE_DOOR4_STAR:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_gates.spc_boss_defeated = 1;
+                        char *text = "YOU RECEIVED SPACE-4 HUB STAR";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_SPACE_DOOR5_STAR:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_perfect.spc_bonus = 1;
+                        char *text = "YOU RECEIVED SPACE-5 HUB STAR";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_ATLANTIS_DOOR2_OPEN:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_gates.atl_door_2 = 1;
+                        char *text = "ATLS-2 HUB GATE IS NOW OPEN";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_ATLANTIS_DOOR3_OPEN:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_gates.atl_door_3 = 1;
+                        char *text = "ATLS-3 HUB GATE IS NOW OPEN";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_ATLANTIS_DOOR4_OPEN:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_gates.atl_door_boss = 1;
+                        char *text = "ATLS-BOSS HUB GATE IS NOW OPEN";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                    case AP_ATLANTIS_DOOR5_OPEN:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_gates.atl_door_bonus = 1;
+                        char *text = "ATLS-BONUS HUB GATE IS OPEN";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_CARNIVAL_DOOR2_OPEN:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_gates.carn_door_2 = 1;
+                        char *text = "CARN-2 HUB GATE IS NOW OPEN";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_CARNIVAL_DOOR3_OPEN:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_gates.carn_door_3 = 1;
+                        char *text = "CARN-3 HUB GATE IS NOW OPEN";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_CARNIVAL_DOOR4_OPEN:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_gates.carn_door_boss = 1;
+                        char *text = "CARN-BOSS HUB GATE IS NOW OPEN";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_CARNIVAL_DOOR5_OPEN:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_gates.carn_door_bonus = 1;
+                        char *text = "CARN-BONUS HUB GATE IS OPEN";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_PIRATES_DOOR2_OPEN:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_gates.pir_door_2 = 1;
+                        char *text = "PIRATES-2 HUB GATE IS NOW OPEN";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_PIRATES_DOOR3_OPEN:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_gates.pir_door_3 = 1;
+                        char *text = "PIRATES-3 HUB GATE IS NOW OPEN";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_PIRATES_DOOR4_OPEN:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_gates.pir_door_boss = 1;
+                        char *text = "PIRATES-BOSS HUB GATE IS OPEN";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_PIRATES_DOOR5_OPEN:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_gates.pir_door_bonus = 1;
+                        char *text = "PIRATES-BONUS HUB GATE IS OPEN";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_PREHISTORIC_DOOR2_OPEN:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_gates.pre_door_2 = 1;
+                        char *text = "PREHIST-2 HUB GATE IS NOW OPEN";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_PREHISTORIC_DOOR3_OPEN:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_gates.pre_door_3 = 1;
+                        char *text = "PREHIST-3 HUB GATE IS NOW OPEN";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_PREHISTORIC_DOOR4_OPEN:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_gates.pre_door_boss = 1;
+                        char *text = "PREHIST-BOSS HUB GATE IS OPEN";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_PREHISTORIC_DOOR5_OPEN:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_gates.pre_door_bonus = 1;
+                        char *text = "PREHIST-BONUS HUB GATE IS OPEN";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_FORTRESS_DOOR2_OPEN:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_gates.fort_door_2 = 1;
+                        char *text = "FEAR-2 HUB GATE IS NOW OPEN";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_FORTRESS_DOOR3_OPEN:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_gates.fort_door_3 = 1;
+                        char *text = "FEAR-3 HUB GATE IS NOW OPEN";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_FORTRESS_DOOR4_OPEN:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_gates.fort_door_boss = 1;
+                        char *text = "FEAR-BOSS HUB GATE IS NOW OPEN";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_FORTRESS_DOOR5_OPEN:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_gates.fort_door_bonus = 1;
+                        char *text = "FEAR-BONUS HUB GATE IS OPEN";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_SPACE_DOOR2_OPEN:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_gates.spc_door_2 = 1;
+                        char *text = "SPACE-2 HUB GATE IS NOW OPEN";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_SPACE_DOOR3_OPEN:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_gates.spc_door_3 = 1;
+                        char *text = "SPACE-3 HUB GATE IS NOW OPEN";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_SPACE_DOOR4_OPEN:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_gates.spc_door_boss = 1;
+                        char *text = "SPACE-BOSS HUB GATE IS OPEN";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
+                    }
+                    break;
+                case AP_SPACE_DOOR5_OPEN:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_gates.spc_door_bonus = 1;
+                        char *text = "SPACE-BONUS HUB GATE IS OPEN";
+                        DialogQueue(text);
+                        ap_memory.pc.send_text++; 
                     }
                     break;
                 default:
@@ -2203,7 +3085,7 @@ void DialogCheck()
         ap_memory.pc.text_ready = 0;
         ap_memory.pc.n64_text++;
         dialog_addr = display_dialog(0x0A0, 0xC0, 0xFF, 0xFF, 0xFF, 0xFF, 0.75, 0.75, 0, ap_memory.pc.text_queue[ap_memory.pc.n64_text].text, 1);
-        timer = 65;
+        dialog_timer = 65;
         ap_memory.pc.text_queue[ap_memory.pc.n64_text].text[0] = 0x00;
         if(ap_memory.pc.n64_text == 99)
         {
@@ -2257,23 +3139,23 @@ void DialogTimer()
 {
     if(dialog_addr == 0)
     {
-        if(gvr_fade_var == 0)
+        if(gvr_fade_var == 0 && gvr_fade_var_transition == 0)
         {
             ap_memory.pc.text_ready = 1;
         }
         return;
     }
-    if(gvr_fade_var == 0x012C)
+    if(gvr_fade_var == 0x012C && gvr_fade_var_transition == 1)
     {
         dialog_addr = 0;
         return;
     }
-    if(timer != 0)
+    if(dialog_timer != 0)
     {
-        timer--;
+        dialog_timer--;
         
         u32 alpha_address = dialog_addr + 0x005B;
-        switch (timer)
+        switch (dialog_timer)
         {
         case 9:
             (*(u8*) alpha_address) = 0xE6;
@@ -2333,9 +3215,13 @@ void TrapTimer()
                 {
                     gvr_fn_glover_cheat(0x18, 1);
                 }
-                else if(ap_memory.pc.items[AP_OPEN_WORLDS] > 0)
+                if(ap_memory.pc.items[AP_OPEN_WORLDS] > 0)
                 {
                     gvr_fn_glover_cheat(0x19, 1);
+                }
+                if(ap_memory.pc.items[AP_MAD_GARIBS] > 0)
+                {
+                    gvr_fn_glover_cheat(0x0D, 1);
                 }
                 is_cheat = false;
             }
@@ -2359,52 +3245,66 @@ void Goal()
         switch(ap_memory.pc.worlds[level].door)
         {
             case 1:
-                gvr_gates.atl_door_2 = 1;
                 ap_memory.pc.worlds[level].goal = 1;
-                if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
-                    || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_perfect.atl_1 = 1;
+                    gvr_gates.atl_door_2 = 1;  
+                    if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
+                        || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                    {
+                        gvr_perfect.atl_1 = 1;
+                    }
                 }
                 break;
             case 2:
-                gvr_gates.atl_door_3 = 1;
                 ap_memory.pc.worlds[level].goal = 1;
-                if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
-                    || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_perfect.atl_2 = 1;
+                    gvr_gates.atl_door_3 = 1;
+                    if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
+                        || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                    {
+                        gvr_perfect.atl_2 = 1;
+                    }
                 }
                 break;
             case 3:
-                gvr_gates.atl_door_boss = 1;
                 ap_memory.pc.worlds[level].goal = 1;
-                if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
-                    || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_perfect.atl_3 = 1;
+                    gvr_gates.atl_door_boss = 1;
+                    if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
+                        || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                    {
+                        gvr_perfect.atl_3 = 1;
+                    }
                 }
                 break;
             case 4:
                 if(!ap_memory.pc.worlds[level].goal)
                 {
-                    //gvr_wayroom_type = 0x0E - spawn_ball_hub; //TODO
                     gvr_wayroom_type = 0x0D;
                     spawn_ball_hub+=1;
                 }
                 ap_memory.pc.worlds[level].goal = 1;
-                if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
-                    || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_gates.atl_boss_defeated = 1;
+                    if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
+                        || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                    {
+                        gvr_gates.atl_boss_defeated = 1;
+                    }
                 }
                 break;
             case 5:
                 ap_memory.pc.worlds[level].goal = 1;
-                if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
-                    || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_perfect.atl_bonus = 1;
+                    if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
+                        || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                    {
+                        gvr_perfect.atl_bonus = 1;
+                    }
                 }
                 break;
             default:
@@ -2415,52 +3315,66 @@ void Goal()
         switch(ap_memory.pc.worlds[level].door)
         {
             case 1:
-                gvr_gates.carn_door_2 = 1;
                 ap_memory.pc.worlds[level].goal = 1;
-                if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
-                    || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_perfect.carn_1 = 1;
+                    gvr_gates.carn_door_2 = 1;
+                    if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
+                        || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                    {
+                        gvr_perfect.carn_1 = 1;
+                    }
                 }
                 break;
             case 2:
-                gvr_gates.carn_door_3 = 1;
                 ap_memory.pc.worlds[level].goal = 1;
-                if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
-                    || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_perfect.carn_2 = 1;
+                    gvr_gates.carn_door_3 = 1;
+                    if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
+                        || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                    {
+                        gvr_perfect.carn_2 = 1;
+                    }
                 }
                 break;
             case 3:
-                gvr_gates.carn_door_boss = 1;
                 ap_memory.pc.worlds[level].goal = 1;
-                if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
-                    || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_perfect.carn_3 = 1;
+                    gvr_gates.carn_door_boss = 1;
+                    if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
+                        || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                    {
+                        gvr_perfect.carn_3 = 1;
+                    }
                 }
                 break;
             case 4:
                 if(!ap_memory.pc.worlds[level].goal)
                 {
-                    //gvr_wayroom_type = 0x0E - spawn_ball_hub;
                     gvr_wayroom_type = 0x0D;
                     spawn_ball_hub+=1;
                 }
                 ap_memory.pc.worlds[level].goal = 1;
-                if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
-                    || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_gates.carn_boss_defeated = 1;
+                    if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
+                        || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                    {
+                        gvr_gates.carn_boss_defeated = 1;
+                    }
                 }
                 break;
             case 5:
                 ap_memory.pc.worlds[level].goal = 1;
-                if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
-                    || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_perfect.carn_bonus = 1;
+                    if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
+                        || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                    {
+                        gvr_perfect.carn_bonus = 1;
+                    }
                 }
                 break;
             default:
@@ -2471,52 +3385,66 @@ void Goal()
         switch(ap_memory.pc.worlds[level].door)
         {
             case 1:
-                gvr_gates.pir_door_2 = 1;
                 ap_memory.pc.worlds[level].goal = 1;
-                if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
-                    || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_perfect.pir_1 = 1;
+                    gvr_gates.pir_door_2 = 1;
+                    if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
+                        || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                    {
+                        gvr_perfect.pir_1 = 1;
+                    }
                 }
                 break;
             case 2:
-                gvr_gates.pir_door_3 = 1;
                 ap_memory.pc.worlds[level].goal = 1;
-                if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
-                    || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_perfect.pir_2 = 1;
+                    gvr_gates.pir_door_3 = 1;
+                    if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
+                        || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                    {
+                        gvr_perfect.pir_2 = 1;
+                    }
                 }
                 break;
             case 3:
-                gvr_gates.pir_door_boss = 1;
                 ap_memory.pc.worlds[level].goal = 1;
-                if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
-                    || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_perfect.pir_3 = 1;
+                    gvr_gates.pir_door_boss = 1;
+                    if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
+                        || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                    {
+                        gvr_perfect.pir_3 = 1;
+                    }
                 }
                 break;
             case 4:
                 if(!ap_memory.pc.worlds[level].goal)
                 {
-                    //gvr_wayroom_type = 0x0E - spawn_ball_hub;
                     gvr_wayroom_type = 0x0D;
                     spawn_ball_hub+=1;
                 }
                 ap_memory.pc.worlds[level].goal = 1;
-                if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
-                    || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_gates.pir_boss_defeated = 1;
+                    if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
+                        || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                    {
+                        gvr_gates.pir_boss_defeated = 1;
+                    }
                 }
                 break;
             case 5:
                 ap_memory.pc.worlds[level].goal = 1;
-                if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
-                    || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_perfect.pir_bonus = 1;
+                    if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
+                        || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                    {
+                        gvr_perfect.pir_bonus = 1;
+                    }
                 }
                 break;
             default:
@@ -2527,52 +3455,66 @@ void Goal()
         switch(ap_memory.pc.worlds[level].door)
         {
             case 1:
-                gvr_gates.pre_door_2 = 1;
                 ap_memory.pc.worlds[level].goal = 1;
-                if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
-                    || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_perfect.pre_1 = 1;
+                    gvr_gates.pre_door_2 = 1;
+                    if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
+                        || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                    {
+                        gvr_perfect.pre_1 = 1;
+                    }
                 }
                 break;
             case 2:
-                gvr_gates.pre_door_3 = 1;
                 ap_memory.pc.worlds[level].goal = 1;
-                if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
-                    || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_perfect.pre_2 = 1;
+                    gvr_gates.pre_door_3 = 1;
+                    if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
+                        || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                    {
+                        gvr_perfect.pre_2 = 1;
+                    }
                 }
                 break;
             case 3:
-                gvr_gates.pre_door_boss = 1;
                 ap_memory.pc.worlds[level].goal = 1;
-                if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
-                    || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_perfect.pre_3 = 1;
+                    gvr_gates.pre_door_boss = 1;
+                    if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
+                        || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                    {
+                        gvr_perfect.pre_3 = 1;
+                    }
                 }
                 break;
             case 4:
                 if(!ap_memory.pc.worlds[level].goal)
                 {
-                    //gvr_wayroom_type = 0x0E - spawn_ball_hub;
                     gvr_wayroom_type = 0x0D;
                     spawn_ball_hub+=1;
                 }
                 ap_memory.pc.worlds[level].goal = 1;
-                if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
-                    || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_gates.pre_boss_defeated = 1;
+                    if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
+                        || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                    {
+                        gvr_gates.pre_boss_defeated = 1;
+                    }
                 }
                 break;
             case 5:
                 ap_memory.pc.worlds[level].goal = 1;
-                if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
-                    || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_perfect.pre_bonus = 1;
+                    if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
+                        || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                    {
+                        gvr_perfect.pre_bonus = 1;
+                    }
                 }
                 break;
             default:
@@ -2583,52 +3525,66 @@ void Goal()
         switch(ap_memory.pc.worlds[level].door)
         {
             case 1:
-                gvr_gates.fort_door_2 = 1;
                 ap_memory.pc.worlds[level].goal = 1;
-                if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
-                    || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_perfect.fof_1 = 1;
+                    gvr_gates.fort_door_2 = 1;
+                    if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
+                        || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                    {
+                        gvr_perfect.fof_1 = 1;
+                    }
                 }
                 break;
             case 2:
-                gvr_gates.fort_door_3 = 1;
                 ap_memory.pc.worlds[level].goal = 1;
-                if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
-                    || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_perfect.fof_2 = 1;
+                    gvr_gates.fort_door_3 = 1;
+                    if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
+                        || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                    {
+                        gvr_perfect.fof_2 = 1;
+                    }
                 }
                 break;
             case 3:
-                gvr_gates.fort_door_boss = 1;
                 ap_memory.pc.worlds[level].goal = 1;
-                if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
-                    || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_perfect.fof_3 = 1;
+                    gvr_gates.fort_door_boss = 1;
+                    if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
+                        || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                    {
+                        gvr_perfect.fof_3 = 1;
+                    }
                 }
                 break;
             case 4:
                 if(!ap_memory.pc.worlds[level].goal)
                 {
-                    //gvr_wayroom_type = 0x0E - spawn_ball_hub;
                     gvr_wayroom_type = 0x0D;
                     spawn_ball_hub+=1;
                 }
                 ap_memory.pc.worlds[level].goal = 1;
-                if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
-                    || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_gates.fort_boss_defeated = 1;
+                    if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
+                        || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                    {
+                        gvr_gates.fort_boss_defeated = 1;
+                    }
                 }
                 break;
             case 5:
                 ap_memory.pc.worlds[level].goal = 1;
-                if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
-                    || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_perfect.fof_bonus = 1;
+                    if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
+                        || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                    {
+                        gvr_perfect.fof_bonus = 1;
+                    }
                 }
                 break;
             default:
@@ -2639,52 +3595,66 @@ void Goal()
         switch(ap_memory.pc.worlds[level].door)
         {
             case 1:
-                gvr_gates.spc_door_2 = 1;
                 ap_memory.pc.worlds[level].goal = 1;
-                if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
-                    || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_perfect.spc_1 = 1;
+                    gvr_gates.spc_door_2 = 1;
+                    if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
+                        || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                    {
+                        gvr_perfect.spc_1 = 1;
+                    }
                 }
                 break;
             case 2:
-                gvr_gates.spc_door_3 = 1;
                 ap_memory.pc.worlds[level].goal = 1;
-                if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
-                    || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_perfect.spc_2 = 1;
+                    gvr_gates.spc_door_3 = 1;
+                    if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
+                        || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                    {
+                        gvr_perfect.spc_2 = 1;
+                    }
                 }
                 break;
             case 3:
-                gvr_gates.spc_door_boss = 1;
                 ap_memory.pc.worlds[level].goal = 1;
-                if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
-                    || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_perfect.spc_3 = 1;
+                    gvr_gates.spc_door_boss = 1;
+                    if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
+                        || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                    {
+                        gvr_perfect.spc_3 = 1;
+                    }
                 }
                 break;
             case 4:
                 if(!ap_memory.pc.worlds[level].goal)
                 {
-                    //gvr_wayroom_type = 0x0E - spawn_ball_hub;
                     gvr_wayroom_type = 0x0D;
                     spawn_ball_hub+=1;
                 }
                 ap_memory.pc.worlds[level].goal = 1;
-                if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
-                    || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_gates.spc_boss_defeated = 1;
+                    if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
+                        || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                    {
+                        gvr_gates.spc_boss_defeated = 1;
+                    }
                 }
                 break;
             case 5:
                 ap_memory.pc.worlds[level].goal = 1;
-                if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
-                    || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_perfect.spc_bonus = 1;
+                    if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
+                        || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
+                    {
+                        gvr_perfect.spc_bonus = 1;
+                    }
                 }
                 break;
             default:
@@ -3029,7 +3999,7 @@ void UnlockSecret()
             }
             if(ap_memory.pc.worlds[lvl].hub_entrance == hub && ap_memory.pc.worlds[lvl].door != 5) // No secret level
             {
-                stars += ap_memory.pc.worlds[lvl].star;
+                stars += ap_memory.pc.worlds[lvl].star; 
                 required++;
             }
         }
@@ -3038,11 +4008,45 @@ void UnlockSecret()
             switch (hub)
             {
                 case 1:
-                    gvr_gates.atl_door_bonus = 1;
+                    if(ap_memory.pc.settings.portals == 0)
+                    {
+                        gvr_gates.atl_door_bonus = 1;
+                    }
                     ap_memory.pc.secret_unlock[hub] = 1;
                     break;
                 case 2:
-                    gvr_gates.carn_door_bonus = 1;
+                    if(ap_memory.pc.settings.portals == 0)
+                    {
+                        gvr_gates.carn_door_bonus = 1;
+                    }
+                    ap_memory.pc.secret_unlock[hub] = 1;
+                    break;
+                case 3:
+                    if(ap_memory.pc.settings.portals == 0)
+                    {
+                        gvr_gates.pir_door_bonus = 1;
+                    }
+                    ap_memory.pc.secret_unlock[hub] = 1;
+                    break;
+                case 4:
+                    if(ap_memory.pc.settings.portals == 0)
+                    {
+                        gvr_gates.pre_door_bonus = 1;
+                    }
+                    ap_memory.pc.secret_unlock[hub] = 1;
+                    break;
+                case 5:
+                    if(ap_memory.pc.settings.portals == 0)
+                    {
+                        gvr_gates.fort_door_bonus = 1;
+                    }
+                    ap_memory.pc.secret_unlock[hub] = 1;
+                    break;
+                case 6:
+                    if(ap_memory.pc.settings.portals == 0)
+                    {
+                        gvr_gates.spc_door_bonus = 1;
+                    }
                     ap_memory.pc.secret_unlock[hub] = 1;
                     break;
                 default:

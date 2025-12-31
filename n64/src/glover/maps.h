@@ -138,6 +138,7 @@
         u8 atl_door_2: 1;
     } doors_t;
     #define gvr_current_map (*(u8*)0x801E7531)
+    #define gvr_prev_map (*(u8*)0x801E7532)
     #define gvr_map_transistion (*(u8*)0x801E75C4)
     #define gvr_gates (*(doors_t*)0x801EAA48)
     #define gvr_perfect (*(perfect_t*)0x801EAA4C)
