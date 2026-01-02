@@ -4,7 +4,6 @@ This repository is designed to work with [GloverArchipelago](https://github.com/
 # How to build
 ## Dependencies
 In the n64/tools folder, you will need to place:
-* [libdragon/](https://github.com/DragonMinded/libdragon)
 * [mips64/](https://github.com/DragonMinded/libdragon/releases/tag/toolchain-continuous-prerelease)
 * [armips](https://github.com/Kingcom/armips/releases)
 

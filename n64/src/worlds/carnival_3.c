@@ -760,7 +760,6 @@ void MonitorCheckpointCarnival3()
                 if(object->visited == 0)
                 {
                     ap_memory.pc.worlds[AP_CARNIVAL_L3].checkpoint_checks[i].collected = 1;
-                    ap_memory.pc.worlds[AP_CARNIVAL_L3].checkpoint_checks[i].ptr = 0;
                 }
             }
         }
